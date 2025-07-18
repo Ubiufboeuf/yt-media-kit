@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "module": "esnext", // 'bundler' o 'esnext' son buenas opciones para Bun
+    "moduleResolution": "bundler", // Bun recomienda 'bundler'
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    // --- CAMBIOS CLAVE PARA BUN ---
+    "noEmit": true, // <--- Esto es lo importante: No genera archivos JS en disco
+    "outDir": "./dist", // Puedes mantenerlo, pero no se usará si noEmit es true
+    "allowImportingTsExtensions": true, // <--- Fundamental para Bun con TS
+    // --- FIN CAMBIOS CLAVE ---
+    "rootDir": "./src",
+    "lib": ["es2021"],
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules" // 'dist' ya no necesita excluirse si noEmit es true
+  ]
+}

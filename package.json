@@ -1,0 +1,42 @@
+{
+  "name": "yt-media-kit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm tsc",
+    "dev": "bun --watch src/index.ts dev",
+    "start": "bun src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.1",
+  "devDependencies": {
+    "@eslint/js": "9.29.0",
+    "@stylistic/eslint-plugin": "5.0.0",
+    "@types/boxen": "3.0.5",
+    "@types/bun": "latest",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "24.0.4",
+    "@types/ora": "3.2.0",
+    "@types/yargs": "17.0.33",
+    "chalk": "5.4.1",
+    "eslint": "9.29.0",
+    "globals": "16.2.0",
+    "typescript": "5.8.3",
+    "typescript-eslint": "8.35.0"
+  },
+  "dependencies": {
+    "@types/prompts": "2.4.9",
+    "boxen": "8.0.1",
+    "cfonts": "3.3.0",
+    "cli-table3": "0.6.5",
+    "fs-extra": "11.3.0",
+    "ora": "8.2.0",
+    "prompts": "2.4.2",
+    "yargs": "18.0.0"
+  },
+  "private": true
+}
