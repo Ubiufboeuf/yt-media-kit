@@ -3,6 +3,8 @@ import prompts from 'prompts'
 import { exit } from 'node:process'
 import { isDevMode, setIsDevMode } from './lib/cli_arguments'
 import chalk from 'chalk'
+import { startFullProcess } from './cli/fullProcess'
+import { clearAll } from './cli/resetAndClean'
 console.clear()
 
 const devMode = process.argv.some(a => a.toLowerCase() === 'dev')
@@ -28,13 +30,13 @@ const processMode = await prompts({
 })
 
 // Funciones para ejecutar los modos
-// const modes: { [key: string]: () => (Promise<void> | void) } = {
-//   fullProcess: startFullProcess,
-//   clearAll: clearAll
-// }
+const modes: { [key: string]: () => (Promise<void> | void) } = {
+  fullProcess: startFullProcess,
+  clearAll: clearAll
+}
 
-// const option: string = processMode.option
-// if (!option || !modes[option]) exit(0)
+const option: string = processMode.option
+if (!option || !modes[option]) exit(0)
 
-// const mode = modes[option]
-// mode()
+const mode = modes[option]
+mode()
