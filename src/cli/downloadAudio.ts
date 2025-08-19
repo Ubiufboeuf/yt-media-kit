@@ -1,5 +1,9 @@
 import { spawnAsync } from '../utils/spawnAsync'
 import { getSizeInMiB } from '../utils/getSizeInMiB'
+import { readdirSync, unlinkSync } from 'node:fs'
+import { Rutas } from 'src/lib/constants'
+import chalk from 'chalk'
+import { download } from 'src/utils/download'
 
 export async function getAudioId (videoId: string) {
   const ytDlpParams = ['-F', `https://www.youtube.com/watch?v=${videoId}`]
@@ -41,4 +45,22 @@ export async function getAudioId (videoId: string) {
   }
   
   return best_id.id
+}
+
+export async function descargarAudio (videoId: string, forceDownload: boolean = false) {
+  const audiosPorProcesar = readdirSync(Rutas.audios_descargados)
+  const existeAudio = audiosPorProcesar.some(f => f.includes(videoId))
+
+  if (!forceDownload && existeAudio) {
+    console.log(chalk.gray('\n(Ya existe el audio, omitiendo)'))
+    return
+  }
+  
+  await download('audio', videoId, forceDownload, 'audio')
+
+  const audios = readdirSync(Rutas.audios_descargados)
+  
+  if (audios.includes(`${videoId}.mp4`)) {
+    unlinkSync(`${Rutas.audios_descargados}/${videoId}.mp4`)
+  }
 }
