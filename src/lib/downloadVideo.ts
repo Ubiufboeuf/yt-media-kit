@@ -1,5 +1,7 @@
+import { spawnAsync } from '@/utils/spawnAsync'
 import type { Resolution } from '../env'
 import prompts from 'prompts'
+import { getSizeInMiB } from '@/utils/getSizeInMiB'
 
 export async function askForResolution () {
   const res = await prompts({
@@ -50,4 +52,48 @@ export async function getMaxResolutionToDownload (_resoluciones: Resolution[]): 
     desiredNumber: desiredNumber,
     downloadNumber: resolutionNumber
   }
+}
+
+export async function getResolutionId (videoId: string, download: string) {
+  const ytDlpParams = ['-F', `https://www.youtube.com/watch?v=${videoId}`]
+  const ytDlpOutput = await spawnAsync('yt-dlp', ytDlpParams, false)
+  const lines: string[] = []
+
+  // console.log('lines', lines)
+
+  for (const line of ytDlpOutput.split('\n')) {
+    if (line.includes('storyboard') || line.includes('images') || line.includes('[youtube]') || line.includes('[info]') || line.includes('---') || line.includes('ID') || line.trim() === '') continue
+    const cleanedLine = line.replaceAll(/\s+/g, ' ').trim()
+    lines.push(cleanedLine)
+  }
+
+  const best_id = { id: '', size: '', sizeInMiB: 0, tbr: '', tbrNumber: 0 }
+
+  for (const line of lines) {
+    const [part1, part2, part3] = line.split('|').map(p => p.trim())
+    if (!part1 || !part2 || !part3) continue
+    
+    const [id, , res] = part1.split(' ')
+    const part2Splitted = part2.split(' ')
+    const size = part2Splitted[part2.includes('~') ? 1 : 0]
+    const tbr = part2Splitted[part2.includes('~') ? 2 : 1]
+    const res_height = res.split('x')[1]
+
+    let videoOnly = false
+    if (part3.includes('video only')) videoOnly = true
+    
+    if (!videoOnly || res_height !== download.replace('p', '')) continue
+    
+    const sizeInMiB = getSizeInMiB(size)
+  
+    if ((videoOnly && !best_id.id) || (best_id.sizeInMiB < sizeInMiB) || (best_id.sizeInMiB === sizeInMiB && best_id.tbrNumber < Number(tbr.replace('k', '')))) {
+      best_id.id = id
+      best_id.size = size
+      best_id.sizeInMiB = sizeInMiB
+      best_id.tbr = tbr
+      best_id.tbrNumber = Number(tbr.replace('k', ''))
+    }
+  }
+  
+  return best_id.id
 }
