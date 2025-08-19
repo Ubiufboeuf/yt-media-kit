@@ -1,5 +1,5 @@
-import { spawnAsync } from '@/utils/spawnAsync'
-import { getSizeInMiB } from '@/utils/getSizeInMiB'
+import { spawnAsync } from '../utils/spawnAsync'
+import { getSizeInMiB } from '../utils/getSizeInMiB'
 
 export async function getAudioId (videoId: string) {
   const ytDlpParams = ['-F', `https://www.youtube.com/watch?v=${videoId}`]

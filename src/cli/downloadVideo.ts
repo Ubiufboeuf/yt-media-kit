@@ -1,7 +1,7 @@
-import { spawnAsync } from '@/utils/spawnAsync'
+import { spawnAsync } from '../utils/spawnAsync'
 import type { Resolution } from '../env'
 import prompts from 'prompts'
-import { getSizeInMiB } from '@/utils/getSizeInMiB'
+import { getSizeInMiB } from '../utils/getSizeInMiB'
 
 export async function askForResolution () {
   const res = await prompts({
