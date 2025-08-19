@@ -13,12 +13,7 @@
     "rootDir": "./src",
     "lib": ["es2021"],
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src/**/*.ts"
