@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "yt-media-kit": "./bin/yt-media-kit"
+  },
   "scripts": {
     "dev": "bun --watch src/index.ts dev",
     "start": "bun src/index.ts"
