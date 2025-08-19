@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Choices",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Video id"
+      },
+      "title": {
+        "type": "string",
+        "description": "Title of the choice"
+      }
+    },
+    "additionalProperties": false
+  }
+}
