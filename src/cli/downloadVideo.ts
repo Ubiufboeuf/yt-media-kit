@@ -2,6 +2,12 @@ import { spawnAsync } from '../utils/spawnAsync'
 import type { Resolution } from '../env'
 import prompts from 'prompts'
 import { getSizeInMiB } from '../utils/getSizeInMiB'
+import { readdir } from 'fs/promises'
+import { Rutas } from 'src/lib/constants'
+import { errorHandler } from 'src/utils/errorHandler'
+import { download } from 'src/utils/download'
+import { unlinkSync } from 'node:fs'
+import chalk from 'chalk'
 
 export async function askForResolution () {
   const res = await prompts({
@@ -96,4 +102,46 @@ export async function getResolutionId (videoId: string, download: string) {
   }
   
   return best_id.id
+}
+
+export async function descargarVideo (videoId: string, resolutions: Resolution[], maxResToDownload: Resolution, forceDownload: boolean = false) {
+  // console.log('descargar video', videoId, resolutions, maxResToDownload, forceDownload)
+  let videosDescargados: string[] = []
+  try {
+    videosDescargados = await readdir(Rutas.videos_descargados, 'utf8')
+  } catch (err) {
+    errorHandler(err, 'Error leyendo los videos descargados')
+  }
+
+  if (!videosDescargados.some(file => file.includes(videoId))) {
+    // Si no hay videos descargados con este id, descarga la máxima resolución que quiere el usuario
+    await download('video', videoId, forceDownload, maxResToDownload)
+    return
+  }
+
+  let videoDescargado = ''
+  for (const video of videosDescargados) {
+    if (video.includes(videoId)) {
+      videoDescargado = video
+    }
+  }
+
+  const match = videoDescargado.match(/\[(.+)\]/)
+  const resolucion = match?.[1]
+  
+  if (resolucion === maxResToDownload.download) {
+    if (forceDownload) {
+      // Si el usuario tiene descargada la misma resolución que quiere, pero fuerza, descarga
+      unlinkSync(`${Rutas.videos_descargados}/${videoDescargado}`)
+      await download('video', videoId, true, maxResToDownload)
+      return
+    }
+
+    console.log(chalk.gray('\n(Ya existe el video, omitiendo)'))
+    return
+  }
+
+  // Si es mayor o menor, pero diferente a la que tiene el usuario, descarga
+  await download('video', videoId, forceDownload, maxResToDownload)
+  unlinkSync(`${Rutas.videos_descargados}/${videoDescargado}`)
 }
