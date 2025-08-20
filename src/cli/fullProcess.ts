@@ -8,6 +8,7 @@ import { isDevMode } from '../lib/cli_arguments'
 import { descargarAudio } from './downloadAudio'
 import list from '../../config/list.json' with { type: 'json' }
 import { saveVideoInList } from '../utils/saveVideoInList'
+// import { convertirAudio } from './convertirAudio'
 
 const response = {
   downloadVideos: 'downloadVideos',
@@ -159,6 +160,10 @@ export async function startFullProcess () {
 
   const downloadAudioPromise = descargarAudio(videoId, options.forceDownloadAudio)
   await oraPromise(downloadAudioPromise, { text: 'Descargando audio', successText: 'Audio descargado', failText: 'No se pudo descargar el audio' })
+
+  // Por ahora lo saco, si veo que da problemas tenerlo en .opus en vez de .mp4 termino esto
+  // const convertAudioPromise = convertirAudio(videoId, options.forceDownloadAudio)
+  // await oraPromise(convertAudioPromise, { text: 'Convirtiendo audio', successText: 'Audio convertido', failText: 'No se pudo convertir el audio' })
 
   // mixVideoWithAudio(videoId)
 }
