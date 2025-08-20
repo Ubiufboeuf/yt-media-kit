@@ -23,6 +23,12 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
       throw errorHandler(err, 'Error descargando el video', false)
     }
 
+    const videos = readdirSync(Rutas.videos_descargados)
+    if (videos.includes(`${videoId}.mp4`)) {
+      return true
+    }
+    return false
+
   } else if (format === 'audio' && maxResToDownload === 'audio') {
     let audioId = ''
     try {
@@ -32,19 +38,26 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     }
     
     const ytDlpParamsAudio = ['-f', `${audioId}`, '-x', '--audio-format', 'opus', '-o', '%(id)s.opus', '-P', Rutas.audios_descargados, `https://www.youtube.com/watch?v=${videoId}`]
-    const ffmpegParamsAudio = ['-i', `${Rutas.audios_descargados}/${videoId}.opus`, `${Rutas.audios_descargados}/${videoId}.mp4`]
 
     if (forceDownload) {
       const audios = readdirSync(Rutas.audios_descargados)
-      if (audios.includes(`${videoId}.opus`)) {
-        unlinkSync(`${Rutas.audios_descargados}/${videoId}.opus`)
-      }
       if (audios.includes(`${videoId}.mp4`)) {
         unlinkSync(`${Rutas.audios_descargados}/${videoId}.mp4`)
       }
     }
 
-    await spawnAsync('yt-dlp', ytDlpParamsAudio)
-    await spawnAsync('ffmpeg', ffmpegParamsAudio)
+    try {
+      await spawnAsync('yt-dlp', ytDlpParamsAudio)
+    } catch (err) {
+      throw errorHandler(err, 'Error descargando el audio', false)
+    }
+
+    const audios = readdirSync(Rutas.audios_descargados)
+    if (audios.includes(`${videoId}.mp4`)) {
+      return true
+    }
+    return false
   }
+
+  return false
 }
