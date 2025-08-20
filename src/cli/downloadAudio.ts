@@ -1,6 +1,6 @@
 import { spawnAsync } from '../utils/spawnAsync'
 import { getSizeInMiB } from '../utils/getSizeInMiB'
-import { readdirSync, unlinkSync } from 'node:fs'
+import { readdirSync } from 'node:fs'
 import { Rutas } from 'src/lib/constants'
 import chalk from 'chalk'
 import { download } from 'src/utils/download'
@@ -56,11 +56,5 @@ export async function descargarAudio (videoId: string, forceDownload: boolean = 
     return
   }
   
-  await download('audio', videoId, forceDownload, 'audio')
-
-  const audios = readdirSync(Rutas.audios_descargados)
-  
-  if (audios.includes(`${videoId}.mp4`)) {
-    unlinkSync(`${Rutas.audios_descargados}/${videoId}.mp4`)
-  }
+  return await download('audio', videoId, forceDownload, 'audio')
 }
