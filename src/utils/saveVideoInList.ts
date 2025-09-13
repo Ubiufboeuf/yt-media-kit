@@ -1,12 +1,12 @@
 import type { List } from '../env'
-import { KWT, Rutas } from '../lib/constants'
+import { KWD, Rutas } from '../lib/constants'
 import { readFile, writeFile } from 'node:fs/promises'
 import { oraPromise } from 'ora'
 
-export async function saveVideoInList (videoId: string, title: string) {
+export async function saveVideoInListOfSuggestions (videoId: string, title: string) {
   let listStr: string
   try {
-    listStr = await readFile(Rutas.list, 'utf8')
+    listStr = await readFile(Rutas.suggest_list, 'utf8')
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message)
@@ -36,7 +36,7 @@ export async function saveVideoInList (videoId: string, title: string) {
   console.log('newList', newList)
 
   try {
-    await oraPromise(writeFile(`${KWT}/src/lib/list.json`, JSON.stringify(newList, null, 2)), { text: 'Guardando...', successText: 'Texto guardado' })
+    await oraPromise(writeFile(`${KWD}/src/lib/list.json`, JSON.stringify(newList, null, 2)), { text: 'Guardando...', successText: 'Texto guardado' })
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message)
