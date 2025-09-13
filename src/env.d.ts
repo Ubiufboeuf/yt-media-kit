@@ -53,6 +53,7 @@ export interface ProgramOptions {
 	downloadVideos: boolean
 	forceDownloadVideo: boolean
 	forceDownloadAudio: boolean
+	syncVideoAndAudio: boolean
 }
 
 export interface Resolution {
@@ -79,3 +80,18 @@ export type List = {
 	id: string,
 	title: string
 }[]
+
+export interface Modes {
+	[key: string]: () => (Promise<void> | void)
+}
+
+export interface Video {
+	id: string
+	title: string
+}
+
+export interface Validation {
+	success: boolean
+	error?: string
+	video: Video
+}

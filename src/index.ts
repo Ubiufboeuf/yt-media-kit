@@ -5,6 +5,7 @@ import { isDevMode, setIsDevMode } from './lib/cli_arguments'
 import chalk from 'chalk'
 import { startFullProcess } from './cli/fullProcess'
 import { clearAll } from './cli/resetAndClean'
+import type { Modes } from './env'
 console.clear()
 
 const devMode = process.argv.some(a => a.toLowerCase() === 'dev')
@@ -30,7 +31,7 @@ const processMode = await prompts({
 })
 
 // Funciones para ejecutar los modos
-const modes: { [key: string]: () => (Promise<void> | void) } = {
+const modes: Modes = {
   fullProcess: startFullProcess,
   clearAll: clearAll
 }
