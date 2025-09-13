@@ -95,18 +95,18 @@ export const FONTFACES = {
 }
 
 export const YT_DLP = 'yt-dlp'
-export const KWT = '/home/mango/Dev/yt-media-kit' // kit-working-directory
-export const PRD = '/home/mango/Dev/nexora' // production-directory
+export const KWD = '/home/mango/Dev/yt-media-kit' // KWD: Kit-Working-Directory
+export const PRD = '/home/mango/Dev/nexora' // PD:  Production-Directory
 export const MIN_RES = '32p'
 
 export const Rutas = {
-	assets: `${KWT}/storage/assets`,
-	audios: `${KWT}/storage/audios`,
-	audios_descargados: `${KWT}/storage/audios_descargados`,
-	completos: `${KWT}/storage/completos`,
-	info: `${KWT}/storage/info`,
-	videos: `${KWT}/storage/videos`,
-	videos_con_audio: `${KWT}/storage/videos_con_audio`,
-	videos_descargados: `${KWT}/storage/videos_descargados`,
-	list: `${KWT}/config/list.json`
+	assets: `${KWD}/storage/assets`,
+	audios: `${KWD}/storage/audios`,
+	audios_descargados: `${KWD}/storage/audios_descargados`,
+	completos: `${KWD}/storage/completos`,
+	info: `${KWD}/storage/info`,
+	videos: `${KWD}/storage/videos`,
+	videos_con_audio: `${KWD}/storage/videos_con_audio`,
+	videos_descargados: `${KWD}/storage/videos_descargados`,
+	suggest_list: `${KWD}/src/lib/videos-to-suggest.json`
 }
