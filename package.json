@@ -7,8 +7,8 @@
     "yt-media-kit": "./bin/yt-media-kit"
   },
   "scripts": {
-    "dev": "bun --watch src/index.ts dev",
-    "start": "bun src/index.ts"
+    "cli": "bun src/cli/index.ts",
+    "dev": "bun --watch src/cli/index.ts dev"
   },
   "keywords": [],
   "author": "",
