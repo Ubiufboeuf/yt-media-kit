@@ -9,11 +9,20 @@
         "type": "string",
         "description": "Video id"
       },
+      "url": {
+        "type": "string",
+        "format": "uri",
+        "description": "Video URL"
+      },
       "title": {
         "type": "string",
         "description": "Title of the choice"
       }
     },
-    "additionalProperties": false
+    "additionalProperties": false,
+    "oneOf": [
+      { "required": ["id"] },
+      { "required": ["url"] }
+    ]
   }
 }
