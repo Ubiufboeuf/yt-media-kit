@@ -3,21 +3,26 @@ import { validateVideoId } from '../utils/validations'
 import { createDirectories } from '../cli/createDirectories'
 import { oraPromise } from 'ora'
 import { askForResolution, descargarVideo, getMaxResolutionToDownload } from '../cli/downloadVideo'
-import type { ProgramOptions, Resolution } from '../env'
+import type { ProgramOptions, Resolution, Validation, Video } from '../env'
 import { isDevMode } from '../lib/cli_arguments'
 import { descargarAudio } from './downloadAudio'
-import list from '../../config/list.json' with { type: 'json' }
-import { saveVideoInList } from '../utils/saveVideoInList'
+import list from '../lib/videos-to-suggest.json' with { type: 'json' }
+import { saveVideoInListOfSuggestions } from '../utils/saveVideoInList'
+import { muxVideoAndAudio } from './muxer'
+import { Rutas } from 'src/lib/constants'
 // import { convertirAudio } from './convertirAudio'
 
 const response = {
   downloadVideos: 'downloadVideos',
   askForResolutions: 'askForResolutions',
   forceDownloadVideo: 'forceDownloadVideo',
-  forceDownloadAudio: 'forceDownloadAudio'
+  forceDownloadAudio: 'forceDownloadAudio',
+  syncVideoAndAudio: 'syncVideoAndAudio'
 }
 
 export async function startFullProcess () {
+  const video: Video = { id: 'unknown', title: 'unknown' }
+  
   const choices: Choice[] = [
     { title: 'Escribir el ID', value: 'custom' },
     // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres
@@ -57,22 +62,30 @@ export async function startFullProcess () {
 
   if (!videoId) return
 
+  video.id = videoId
+
   // Validar resolución
   if (!isDevMode) {
-    let validated = false
+    let validation: Validation
     try {
-      const title = await validateVideoId(videoId)
-      console.log('Video:', title)
-      if (title) {
-        await saveVideoInList(videoId, title)
-        validated = true
-      }
+      validation = await validateVideoId(videoId)
     } catch (err) {
       console.error(err)
       return
     }
+
+    // console.log('validation', validation)
     
-    if (!validated) return
+    if (!validation.success) {
+      console.error(validation?.error || 'Error validando el video')
+      return
+    }
+
+    // console.log('Video:', validation.video.title)
+
+    video.title = validation.video.title
+    
+    await saveVideoInListOfSuggestions(videoId, validation.video.title)
   }
 
   // Crear directorios
@@ -84,7 +97,8 @@ export async function startFullProcess () {
     askForResolutions: false,
     downloadVideos: false,
     forceDownloadVideo: false,
-    forceDownloadAudio: false
+    forceDownloadAudio: false,
+    syncVideoAndAudio: false
   }
 
   // const { value: options }: { value: keyof ProgramOptions } = await prompts({
@@ -117,6 +131,12 @@ export async function startFullProcess () {
         description: 'Fuerza una descarga del audio, incluso si ya existe',
         value: response.forceDownloadAudio,
         selected: false
+      },
+      {
+        title: 'Sincronizar video con audio',
+        description: 'Unir y separar video con audio',
+        value: response.syncVideoAndAudio,
+        selected: true
       }
     ]
   })
@@ -131,39 +151,39 @@ export async function startFullProcess () {
     }
   }
 
-  if (!options.downloadVideos) {
-    // mixVideoWithAudio(videoId) // <- esto va para después
-    console.log('no download video')
-    return
+  if (options.downloadVideos) {
+    let resolutions: Resolution[] | null = null
+
+    if (options.askForResolutions) {
+      resolutions = await askForResolution()
+    } else {
+      // en base a la lista o por defecto 360p
+      resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
+    }
+
+    // Es la máxima resolución, no el id para descargar, eso lo maneja descargarVideo()
+    let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
+    try {
+      maxResolutionToDownload = await getMaxResolutionToDownload(resolutions)
+    } catch {
+      console.error('No se pudo descargar el video')
+      return
+    }
+
+    const downloadVideosPromise = descargarVideo(videoId, resolutions, maxResolutionToDownload, options.forceDownloadVideo)
+    await oraPromise(downloadVideosPromise, { text: 'Descargando video', successText: 'Video descargado', failText: 'No se pudo descargar el video' })
+
+    const downloadAudioPromise = descargarAudio(videoId, options.forceDownloadAudio)
+    await oraPromise(downloadAudioPromise, { text: 'Descargando audio', successText: 'Audio descargado', failText: 'No se pudo descargar el audio' })
+
+    // Por ahora lo saco, si veo que da problemas tenerlo en .opus en vez de .mp4 sigo esto
+    // const convertAudioPromise = convertirAudio(videoId, options.forceDownloadAudio)
+    // await oraPromise(convertAudioPromise, { text: 'Convirtiendo audio', successText: 'Audio convertido', failText: 'No se pudo convertir el audio' })
   }
-  
-  let resolutions: Resolution[] | null = null
 
-  if (options.askForResolutions) {
-    resolutions = await askForResolution()
-  } else {
-    // en base a la lista o por defecto 360p
-    resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
-  }
+  const muxVideoAndAudioPromise = muxVideoAndAudio(videoId)
+  await oraPromise(muxVideoAndAudioPromise, { text: 'Mezclando audio con video', successText: `Audio y video mezclados en ${Rutas.videos_con_audio}/${videoId}.mp4`, failText: 'No se pudo mezclar el audio con el video' })
 
-  // Es la máxima resolución, no el id para descargar, eso lo maneja descargarVideo()
-  let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
-  try {
-    maxResolutionToDownload = await getMaxResolutionToDownload(resolutions)
-  } catch {
-    console.error('No se pudo descargar el video')
-    return
-  }
-
-  const downloadVideosPromise = descargarVideo(videoId, resolutions, maxResolutionToDownload, options.forceDownloadVideo)
-  await oraPromise(downloadVideosPromise, { text: 'Descargando video', successText: 'Video descargado', failText: 'No se pudo descargar el video' })
-
-  const downloadAudioPromise = descargarAudio(videoId, options.forceDownloadAudio)
-  await oraPromise(downloadAudioPromise, { text: 'Descargando audio', successText: 'Audio descargado', failText: 'No se pudo descargar el audio' })
-
-  // Por ahora lo saco, si veo que da problemas tenerlo en .opus en vez de .mp4 termino esto
-  // const convertAudioPromise = convertirAudio(videoId, options.forceDownloadAudio)
-  // await oraPromise(convertAudioPromise, { text: 'Convirtiendo audio', successText: 'Audio convertido', failText: 'No se pudo convertir el audio' })
-
-  // mixVideoWithAudio(videoId)
+  const demuxVideoAndAudioPromise = muxVideoAndAudio(videoId)
+  await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: `Audio y video separados en ${Rutas.videos}/${videoId}.mp4 y ${Rutas.audios}/${videoId}.opus`, failText: 'No se pudieron separar el audio y el video' })
 }
