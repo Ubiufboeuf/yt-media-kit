@@ -8,6 +8,7 @@
   },
   "scripts": {
     "cli": "bun src/cli/index.ts",
+    "start": "bun cli",
     "dev": "bun --watch src/cli/index.ts dev"
   },
   "keywords": [],
