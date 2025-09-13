@@ -3,8 +3,8 @@ import prompts from 'prompts'
 import { exit } from 'node:process'
 import { isDevMode, setIsDevMode } from './lib/cli_arguments'
 import chalk from 'chalk'
-import { startFullProcess } from './cli/fullProcess'
-import { clearAll } from './cli/resetAndClean'
+import { startFullProcess } from './cli/commands/fullProcess'
+import { clearAll } from './cli/commands/resetAndClean'
 import type { Modes } from './env'
 console.clear()
 

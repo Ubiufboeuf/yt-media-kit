@@ -1,5 +1,5 @@
-import { spawnAsync } from '../utils/spawnAsync'
-import { getSizeInMiB } from '../utils/getSizeInMiB'
+import { spawnAsync } from '../../../utils/spawnAsync'
+import { getSizeInMiB } from '../../../utils/getSizeInMiB'
 import { readdirSync } from 'node:fs'
 import { Rutas } from 'src/lib/constants'
 import chalk from 'chalk'

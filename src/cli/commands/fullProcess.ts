@@ -1,14 +1,14 @@
 import prompts, { type Choice } from 'prompts'
-import { validateVideoId } from '../utils/validations'
-import { createDirectories } from '../cli/createDirectories'
+import { validateVideoId } from '../../utils/validations'
+import { createDirectories } from '../../core/pipeline/steps/createDirectories'
 import { oraPromise } from 'ora'
-import { askForResolution, descargarVideo, getMaxResolutionToDownload } from '../cli/downloadVideo'
-import type { ProgramOptions, Resolution, Validation, Video } from '../env'
-import { isDevMode } from '../lib/cli_arguments'
-import { descargarAudio } from './downloadAudio'
-import list from '../lib/videos-to-suggest.json' with { type: 'json' }
-import { saveVideoInListOfSuggestions } from '../utils/saveVideoInList'
-import { muxVideoAndAudio } from './muxer'
+import { askForResolution, descargarVideo, getMaxResolutionToDownload } from '../../core/pipeline/steps/downloadVideo'
+import type { ProgramOptions, Resolution, Validation, Video } from '../../env'
+import { isDevMode } from '../../lib/cli_arguments'
+import { descargarAudio } from '../../core/pipeline/steps/downloadAudio'
+import list from '../../lib/videos-to-suggest.json' with { type: 'json' }
+import { saveVideoInListOfSuggestions } from '../../utils/saveVideoInList'
+import { muxVideoAndAudio } from '../../core/pipeline/steps/muxing'
 import { Rutas } from 'src/lib/constants'
 // import { convertirAudio } from './convertirAudio'
 

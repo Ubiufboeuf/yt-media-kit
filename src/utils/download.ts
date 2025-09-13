@@ -3,8 +3,8 @@ import { errorHandler } from './errorHandler'
 import { spawnAsync } from './spawnAsync'
 import { Rutas } from '../lib/constants'
 import { readdirSync, unlinkSync } from 'node:fs'
-import { getResolutionId } from '../cli/downloadVideo'
-import { getAudioId } from '../cli/downloadAudio'
+import { getResolutionId } from '../core/pipeline/steps/downloadVideo'
+import { getAudioId } from '../core/pipeline/steps/downloadAudio'
 
 export async function download (format: 'video' | 'audio', videoId: string, forceDownload: boolean, maxResToDownload: Resolution | 'audio') {
   if (format === 'video' && maxResToDownload !== 'audio') {

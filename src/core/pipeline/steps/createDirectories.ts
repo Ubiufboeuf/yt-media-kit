@@ -1,4 +1,4 @@
-import { Rutas } from '../lib/constants'
+import { Rutas } from '../../../lib/constants'
 import { mkdirp } from 'fs-extra'
 import { writeFile } from 'node:fs/promises'
 

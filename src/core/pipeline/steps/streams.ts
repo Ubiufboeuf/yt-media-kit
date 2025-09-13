@@ -1,0 +1,1 @@
+// para DASH por ahora, y tal vez en un futuro también para HLS
