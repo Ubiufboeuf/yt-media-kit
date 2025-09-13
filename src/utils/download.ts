@@ -12,7 +12,7 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     try {
       resolutionId = await getResolutionId(videoId, maxResToDownload.download)
     } catch (err) {
-      throw errorHandler(err, '\nNo se pudo conseguir el id de la resolución')
+      errorHandler(err, '\nNo se pudo conseguir el id de la resolución')
     }
     
     const downloadParams = ['-f', `${resolutionId}/mp4`, '-o', `[${maxResToDownload.download}]-%(id)s.%(ext)s`, '-P', Rutas.videos_descargados, `https://www.youtube.com/watch?v=${videoId}`]
@@ -20,7 +20,7 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     try {
       await spawnAsync('yt-dlp', downloadParams)
     } catch (err) {
-      throw errorHandler(err, 'Error descargando el video', false)
+      errorHandler(err, 'Error descargando el video', false)
     }
 
     const videos = readdirSync(Rutas.videos_descargados)
@@ -34,7 +34,7 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     try {
       audioId = await getAudioId(videoId)
     } catch (err) {
-      throw errorHandler(err, '\nNo se pudo conseguir el id del audio')
+      errorHandler(err, '\nNo se pudo conseguir el id del audio')
     }
     
     const ytDlpParamsAudio = ['-f', `${audioId}`, '-x', '--audio-format', 'opus', '-o', '%(id)s.opus', '-P', Rutas.audios_descargados, `https://www.youtube.com/watch?v=${videoId}`]
@@ -49,7 +49,7 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     try {
       await spawnAsync('yt-dlp', ytDlpParamsAudio)
     } catch (err) {
-      throw errorHandler(err, 'Error descargando el audio', false)
+      errorHandler(err, 'Error descargando el audio', false)
     }
 
     const audios = readdirSync(Rutas.audios_descargados)

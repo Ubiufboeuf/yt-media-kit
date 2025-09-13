@@ -110,3 +110,14 @@ export const Rutas = {
 	videos_descargados: `${KWD}/storage/videos_descargados`,
 	suggest_list: `${KWD}/src/lib/videos-to-suggest.json`
 }
+
+export const Rutas_para_borrar = {
+	assets: Rutas.assets,
+	audios: Rutas.audios,
+	audios_descargados: Rutas.audios_descargados,
+	completos: Rutas.completos,
+	info: Rutas.info,
+	videos: Rutas.videos,
+	videos_con_audio: Rutas.videos_con_audio,
+	videos_descargados: Rutas.videos_descargados
+}

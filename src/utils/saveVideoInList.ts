@@ -1,29 +1,22 @@
 import type { List } from '../env'
-import { KWD, Rutas } from '../lib/constants'
+import { Rutas } from '../lib/constants'
 import { readFile, writeFile } from 'node:fs/promises'
 import { oraPromise } from 'ora'
+import { errorHandler } from './errorHandler'
 
 export async function saveVideoInListOfSuggestions (videoId: string, title: string) {
   let listStr: string
   try {
     listStr = await readFile(Rutas.suggest_list, 'utf8')
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message)
-    } else {
-      throw new Error('Error leyendo list.json')
-    }
+    throw errorHandler(err, 'Error leyendo la lista de sugerencias')
   }
 
   let list: List
   try {
     list = JSON.parse(listStr)
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message)
-    } else {
-      throw new Error('Error parseando list.json')
-    }
+    throw errorHandler(err, 'Error parseando la lista de sugerencias')
   }
 
   if (list.some(video => video.id === videoId)) return
@@ -36,12 +29,8 @@ export async function saveVideoInListOfSuggestions (videoId: string, title: stri
   console.log('newList', newList)
 
   try {
-    await oraPromise(writeFile(`${KWD}/src/lib/list.json`, JSON.stringify(newList, null, 2)), { text: 'Guardando...', successText: 'Texto guardado' })
+    await oraPromise(writeFile(`${Rutas.suggest_list}`, JSON.stringify(newList, null, 2)), { text: 'Guardando...', successText: 'Texto guardado' })
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message)
-    } else {
-      throw new Error('Error guardando el video en list.json')
-    }
+    errorHandler(err, 'Error guardando el video en la lista de sugerencias')
   }
 }

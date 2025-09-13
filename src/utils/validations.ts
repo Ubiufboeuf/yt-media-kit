@@ -3,6 +3,7 @@ import { spawnAsync } from '../utils/spawnAsync'
 import { oraPromise } from 'ora'
 import { getVideoIdFromUrl } from './readUrl'
 import { Validation } from 'src/env'
+import { errorHandler } from './errorHandler'
 
 const validationError: Validation = {
   success: false,
@@ -37,11 +38,7 @@ export async function validateVideoId (video: string | URL): Promise<Validation>
   try {
     title = await oraPromise(validatePromise, { text: 'Validando...', successText: 'Validado' })
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message)
-    } else {
-      throw new Error('Error validando el id del video')
-    }
+    errorHandler(err, 'Error validando el id del video')
   }
 
   if (title) {

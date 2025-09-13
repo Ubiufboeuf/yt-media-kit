@@ -10,6 +10,7 @@ import list from '../../lib/videos-to-suggest.json' with { type: 'json' }
 import { saveVideoInListOfSuggestions } from '../../utils/saveVideoInList'
 import { muxVideoAndAudio } from '../../core/pipeline/steps/muxing'
 import { Rutas } from 'src/lib/constants'
+import { errorHandler } from 'src/utils/errorHandler'
 // import { convertirAudio } from './convertirAudio'
 
 const response = {
@@ -70,7 +71,7 @@ export async function startFullProcess () {
     try {
       validation = await validateVideoId(videoId)
     } catch (err) {
-      console.error(err)
+      errorHandler(err)
       return
     }
 
@@ -166,7 +167,7 @@ export async function startFullProcess () {
     try {
       maxResolutionToDownload = await getMaxResolutionToDownload(resolutions)
     } catch {
-      console.error('No se pudo descargar el video')
+      errorHandler(null, 'No se pudo descargar el video')
       return
     }
 
