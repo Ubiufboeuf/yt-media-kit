@@ -121,3 +121,20 @@ export const Rutas_para_borrar = {
 	videos_con_audio: Rutas.videos_con_audio,
 	videos_descargados: Rutas.videos_descargados
 }
+
+export const response = {
+  downloadVideos: 'downloadVideos',
+  askForResolutions: 'askForResolutions',
+  forceDownloadVideo: 'forceDownloadVideo',
+  forceDownloadAudio: 'forceDownloadAudio',
+  syncVideoAndAudio: 'syncVideoAndAudio',
+  forceSync: 'forceSync',
+  getVideoData: 'getInformation',
+  getThumbnails: 'getThumbnails'
+}
+
+export const Arguments = {
+	dev: 'dev',
+	skipValidation: 'skipValidation',
+	useDefaultVideo: 'useDefaultVideo'
+}

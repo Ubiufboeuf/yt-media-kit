@@ -1,21 +1,20 @@
 import { say } from '../patched/say'
 import prompts from 'prompts'
 import { exit } from 'node:process'
-import { isDevMode, setIsDevMode } from '../lib/cli_arguments'
 import chalk from 'chalk'
-import { startFullProcess } from '../cli/commands/fullProcess'
+import { fullProcess } from '../cli/commands/fullProcess'
 import { clearAll } from '../cli/commands/resetAndClean'
 import type { Modes } from '../env'
+import { loadProcessParams } from 'src/core/process'
 console.clear()
 
-const devMode = process.argv.some(a => a.toLowerCase() === 'dev')
-setIsDevMode(devMode)
+const params = loadProcessParams()
 
 say('YT-Media-Kit', {
   colors: ['red', 'magenta']
 })
 
-if (isDevMode) {
+if (params.isDevMode) {
   console.log(chalk.yellow('En modo desarrollo se omiten ciertas cosas como la comprobación del id del video para ahorrar tiempo'))
 }
 
@@ -32,8 +31,8 @@ const processMode = await prompts({
 
 // Funciones para ejecutar los modos
 const modes: Modes = {
-  fullProcess: startFullProcess,
-  clearAll: clearAll
+  fullProcess,
+  clearAll
 }
 
 const option: string = processMode.option

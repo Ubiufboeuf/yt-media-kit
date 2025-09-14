@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process'
 import { YT_DLP } from '../lib/constants'
 
 export async function spawnAsync (
-  command: 'yt-dlp' | 'ffmpeg',
+  command: 'yt-dlp' | 'ffmpeg' | 'ffprobe',
   args: string[],
   showOutput: boolean = false
 ): Promise<string> {

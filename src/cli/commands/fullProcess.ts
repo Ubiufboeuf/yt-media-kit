@@ -1,55 +1,71 @@
-import prompts, { type Choice } from 'prompts'
-import { validateVideoId } from '../../utils/validations'
-import { createDirectories } from '../../core/pipeline/steps/createDirectories'
+import prompts from 'prompts'
 import { oraPromise } from 'ora'
 import { askForResolution, descargarVideo, getMaxResolutionToDownload } from '../../core/pipeline/steps/downloadVideo'
-import type { ProgramOptions, Resolution, Validation, Video } from '../../env'
-import { isDevMode } from '../../lib/cli_arguments'
+import type { Resolution, Validation } from '../../env'
+import type { Video, VideoOptions } from '../../core/types'
 import { descargarAudio } from '../../core/pipeline/steps/downloadAudio'
 import list from '../../lib/videos-to-suggest.json' with { type: 'json' }
-import { saveVideoInListOfSuggestions } from '../../utils/saveVideoInList'
-import { muxVideoAndAudio } from '../../core/pipeline/steps/muxing'
-import { Rutas } from 'src/lib/constants'
+import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/muxing'
+import { response, Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
-// import { convertirAudio } from './convertirAudio'
+import { getVideoIdFromUrl } from 'src/utils/readUrl'
+import { addNewVideo, getProcessParam } from 'src/core/process'
+import { validateVideoId } from 'src/utils/validations'
+import { saveVideoInListOfSuggestions } from 'src/utils/saveVideoInList'
+import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
 
-const response = {
-  downloadVideos: 'downloadVideos',
-  askForResolutions: 'askForResolutions',
-  forceDownloadVideo: 'forceDownloadVideo',
-  forceDownloadAudio: 'forceDownloadAudio',
-  syncVideoAndAudio: 'syncVideoAndAudio'
-}
+const useDefaultVideo = getProcessParam('useDefaultVideo')
 
-export async function startFullProcess () {
-  const video: Video = { id: 'unknown', title: 'unknown' }
+export async function fullProcess () {
+  /** = Preguntas =
+   * 
+   * 1. [x] Modo del programa: Completo
+   *      - Completo / Solo descargar / Video+Audio / Personalizado
+   * 
+   * 2. [x] Forma de elegir el video
+   *      - Escribir ID
+   *      - Escribir la url
+   *      - Usar lista de sugeridos
+   * 
+   * 3. [x] Opciones para ejecutar el programa
+   *      - Descargar video
+   *      - Forzar descarga video/audio
+   *      - Re-sincronizar audio+video (mux/demux)
+   *      - Obtener información
+   *      - Descargar thumbnails/assets
+   *      - Preguntar por resoluciones
+   * 
+   * 4. [ ] Comenzar con el video
+   *      - Validar video
+   *      - Crear directorios
+   *      - Ejecutar opciones elegidas antes
+   */
+
+  ; // <- Ese punto y coma es para evitar que la descripción de videoChoice cambie por los comentarios de arriba
   
-  const choices: Choice[] = [
-    { title: 'Escribir el ID', value: 'custom' },
-    // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres
-    ...list.map(({ id, title }) => ({ title: id, value: id, description: title }))
-  ]
+  // 2. Forma de elegir el video
 
-  // Preguntar por el id del video
-  const opcion = await prompts({
+  let video: Video | null = null
+  
+  const videoChoice = await prompts({
     message: 'Elige una opción',
     type: 'autocomplete',
     name: 'value',
-    initial: 'custom',
-    choices
+    initial: 'id',
+    choices: [
+      { title: 'Escribir el ID', value: 'id' },
+      { title: 'URL del video', value: 'url', description: 'Si es de una lista usará el que se esté reproduciendo' },
+      // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres
+      ...list.map(({ id, title }) => ({ title: id, value: id, description: title }))
+    ]
   })
 
-  // console.log(videoIdRes)
-
-  let videoId = opcion.value
-
-  if (opcion.value === 'custom') {
-    const opcion = await prompts({
+  if (videoChoice.value === 'id') {
+    const id = await prompts({
       message: 'ID del video',
       type: 'text',
       name: 'value',
-      initial: isDevMode ? 'c4mHDmvrn4M' : '',
-      choices,
+      initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
       validate: (value) => {
         if (!value || !value.trim()) {
           return 'No puedes ingresar un texto vacío como id'
@@ -58,51 +74,36 @@ export async function startFullProcess () {
       }
     })
     
-    videoId = opcion.value
+    video = addNewVideo(id.value)
+  } else if (videoChoice.value === 'url') {
+    let id: string | null = null
+    const url = await prompts({
+      message: 'ID del video',
+      type: 'text',
+      name: 'value',
+      initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
+      validate: (value) => {
+        id = getVideoIdFromUrl(url.value)
+        if (!value || !value.trim()) {
+          return 'No puedes ingresar un texto vacío como url'
+        } else if (!id) {
+          return 'Esa url no tiene un id válido'
+        }
+        return true
+      }
+    })
+
+    if (!id) return // <- por la validación de antes no debería llegar a acá
+    video = addNewVideo(id)
+  } else {
+    video = addNewVideo(videoChoice.value)
   }
 
-  if (!videoId) return
+  if (!video || !video?.id) return
 
-  video.id = videoId
-
-  // Validar resolución
-  if (!isDevMode) {
-    let validation: Validation
-    try {
-      validation = await validateVideoId(videoId)
-    } catch (err) {
-      errorHandler(err)
-      return
-    }
-
-    // console.log('validation', validation)
-    
-    if (!validation.success) {
-      console.error(validation?.error || 'Error validando el video')
-      return
-    }
-
-    // console.log('Video:', validation.video.title)
-
-    video.title = validation.video.title
-    
-    await saveVideoInListOfSuggestions(videoId, validation.video.title)
-  }
-
-  // Crear directorios
-  const createDirectoriesPromise = createDirectories(videoId)
-  await oraPromise(createDirectoriesPromise, { text: `Creando directorios para ${videoId}`, successText: `Directorios para ${videoId} creados` })
+  // 3. Opciones para ejecutar el programa
 
   // Seleccionar opciones para el programa
-  const defaultOptions: ProgramOptions = {
-    askForResolutions: false,
-    downloadVideos: false,
-    forceDownloadVideo: false,
-    forceDownloadAudio: false,
-    syncVideoAndAudio: false
-  }
-
-  // const { value: options }: { value: keyof ProgramOptions } = await prompts({
   const optionsResponse = await prompts({
     message: 'Elije las opciones para ejecutar el programa',
     type: 'multiselect',
@@ -111,7 +112,7 @@ export async function startFullProcess () {
     choices: [
       {
         title: 'Descargar video',
-        description: 'Si lo desactivas descarga 144p y guarda 32p al final. (Es necesario al menos una pista de audio y video)',
+        description: 'Si lo desactivas buscará si tienes el video descargado, con audio, o alguna resolución de este, y sino, se cancelará el proceso',
         value: response.downloadVideos,
         selected: true
       },
@@ -138,31 +139,74 @@ export async function startFullProcess () {
         description: 'Unir y separar video con audio',
         value: response.syncVideoAndAudio,
         selected: true
-      }
+      },
+      {
+        title: 'Sobreescribir video sincroinzado',
+        description: 'Fuerza la mezcla del video con el audio incluso si ya se tiene. Depende de la anterior opción marcada',
+        value: response.forceSync,
+        selected: false
+      },
+      {
+        title: 'Obtener datos e información del video',
+        description: 'Consigue información detallada del video en base a youtube (yt-dlp)',
+        value: response.getVideoData,
+        selected: true
+      },
+      {
+        title: 'Conseguir carátulas',
+        description: 'Consigue diferentes resoluciones de la caratula del video',
+        value: response.getThumbnails,
+        selected: true
+      },
     ]
   })
 
-  const options: ProgramOptions = {...defaultOptions}
-
   // Agregar opciones elegidas a options validando tipos
-  for (const opcionElegida of optionsResponse.value as (keyof ProgramOptions)[]) {
+  for (const opcionElegida of optionsResponse.value as (keyof VideoOptions)[]) {
     const keys = Object.keys(response)
     if (keys.includes(opcionElegida)) {
-      options[opcionElegida] = true
+      video.options[opcionElegida] = true
     }
   }
 
-  if (options.downloadVideos) {
+  // 4. Comenzar con el video
+  
+  // 4.1 Validar video
+  
+  if (!getProcessParam('skipValidation')) {
+    let validation: Validation
+    try {
+      validation = await validateVideoId(video.id)
+    } catch (err) {
+      errorHandler(err, null, false, true)
+      return
+    }
+    
+    if (!validation.success) {
+      console.error(validation?.error || 'Error validando el video')
+      return
+    }
+
+    video.title = validation.partialVideo.title
+    
+    await saveVideoInListOfSuggestions(video.id, video.title)
+  }
+
+  // 4.2 Crear directorios
+  const createDirectoriesPromise = createDirectories(video.id)
+  await oraPromise(createDirectoriesPromise, { text: `Creando directorios para ${video.id}`, successText: `Directorios para ${video.id} creados` })
+
+  // 4.3.a Descargar video
+  if (video.options.downloadVideo) {
     let resolutions: Resolution[] | null = null
 
-    if (options.askForResolutions) {
+    // Las resoluciones van en base a lo preguntado o por defecto
+    if (video.options.askForResolutions) {
       resolutions = await askForResolution()
     } else {
-      // en base a la lista o por defecto 360p
       resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
     }
 
-    // Es la máxima resolución, no el id para descargar, eso lo maneja descargarVideo()
     let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
     try {
       maxResolutionToDownload = await getMaxResolutionToDownload(resolutions)
@@ -171,20 +215,22 @@ export async function startFullProcess () {
       return
     }
 
-    const downloadVideosPromise = descargarVideo(videoId, resolutions, maxResolutionToDownload, options.forceDownloadVideo)
+    const downloadVideosPromise = descargarVideo(video.id, resolutions, maxResolutionToDownload, video.options.forceDownloadVideo)
     await oraPromise(downloadVideosPromise, { text: 'Descargando video', successText: 'Video descargado', failText: 'No se pudo descargar el video' })
 
-    const downloadAudioPromise = descargarAudio(videoId, options.forceDownloadAudio)
+    const downloadAudioPromise = descargarAudio(video.id, video.options.forceDownloadAudio)
     await oraPromise(downloadAudioPromise, { text: 'Descargando audio', successText: 'Audio descargado', failText: 'No se pudo descargar el audio' })
 
     // Por ahora lo saco, si veo que da problemas tenerlo en .opus en vez de .mp4 sigo esto
-    // const convertAudioPromise = convertirAudio(videoId, options.forceDownloadAudio)
+    // const convertAudioPromise = convertirAudio(video.id, options.forceDownloadAudio)
     // await oraPromise(convertAudioPromise, { text: 'Convirtiendo audio', successText: 'Audio convertido', failText: 'No se pudo convertir el audio' })
   }
 
-  const muxVideoAndAudioPromise = muxVideoAndAudio(videoId)
-  await oraPromise(muxVideoAndAudioPromise, { text: 'Mezclando audio con video', successText: `Audio y video mezclados en ${Rutas.videos_con_audio}/${videoId}.mp4`, failText: 'No se pudo mezclar el audio con el video' })
-
-  const demuxVideoAndAudioPromise = muxVideoAndAudio(videoId)
-  await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: `Audio y video separados en ${Rutas.videos}/${videoId}.mp4 y ${Rutas.audios}/${videoId}.opus`, failText: 'No se pudieron separar el audio y el video' })
+  if (video.options.syncVideoAndAudio) { 
+    const muxVideoAndAudioPromise = muxVideoAndAudio(video.id)
+    await oraPromise(muxVideoAndAudioPromise, { text: 'Mezclando audio con video', successText: `Audio y video mezclados en ${Rutas.videos_con_audio}/${video.id}.mp4`, failText: 'No se pudo mezclar el audio con el video' })
+    
+    const demuxVideoAndAudioPromise = demuxVideoAndAudio(video.id)
+    await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: `Audio y video separados en ${Rutas.videos}/${video.id}.mp4 y ${Rutas.audios}/${video.id}.opus`, failText: 'No se pudieron separar el audio y el video' })
+  }
 }

@@ -5,15 +5,6 @@ import { getVideoIdFromUrl } from './readUrl'
 import { Validation } from 'src/env'
 import { errorHandler } from './errorHandler'
 
-const validationError: Validation = {
-  success: false,
-  error: '',
-  video: {
-    id: '',
-    title: ''
-  }
-}
-
 export async function validateVideoId (video: string | URL): Promise<Validation> {
   let id: string | null = null
 
@@ -24,8 +15,7 @@ export async function validateVideoId (video: string | URL): Promise<Validation>
   }
 
   if (!id) {
-    validationError.error = 'No se pudo conseguir el id del video'
-    return validationError
+    throw new Error('No se pudo conseguir el id del video')
   }
 
   const ytDlpParams = ['--get-title', `https://www.youtube.com/watch?v=${id}`]
@@ -38,7 +28,7 @@ export async function validateVideoId (video: string | URL): Promise<Validation>
   try {
     title = await oraPromise(validatePromise, { text: 'Validando...', successText: 'Validado' })
   } catch (err) {
-    errorHandler(err, 'Error validando el id del video')
+    throw errorHandler(err, 'Error validando el id del video')
   }
 
   if (title) {
@@ -47,7 +37,7 @@ export async function validateVideoId (video: string | URL): Promise<Validation>
 
   return {
     success,
-    video: {
+    partialVideo: {
       id,
       title
     }

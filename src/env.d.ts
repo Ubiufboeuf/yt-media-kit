@@ -48,14 +48,6 @@ type Gradients = typeof GRADIENTS
 type Alignment = typeof ALIGNMENT
 type Fontfaces = typeof FONTFACES
 
-export interface ProgramOptions {
-	askForResolutions: boolean
-	downloadVideos: boolean
-	forceDownloadVideo: boolean
-	forceDownloadAudio: boolean
-	syncVideoAndAudio: boolean
-}
-
 export interface Resolution {
 	download: string
 	desired: string
@@ -85,13 +77,11 @@ export interface Modes {
 	[key: string]: () => (Promise<void> | void)
 }
 
-export interface Video {
-	id: string
-	title: string
-}
-
 export interface Validation {
 	success: boolean
 	error?: string
-	video: Video
+	partialVideo: {
+		id: string,
+		title: string
+	}
 }
