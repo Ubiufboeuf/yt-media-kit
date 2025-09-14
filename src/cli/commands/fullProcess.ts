@@ -35,9 +35,10 @@ export async function fullProcess () {
    *      - Descargar thumbnails/assets
    *      - Preguntar si preguntar las resoluciones
    * 
-   * 3.a. [ ] Preguntar las resoluciones (si lo marcó antes)
+   * 4. [ ] Preparaciones finales
+   *      - Preguntar las resoluciones (si lo marcó antes)
    * 
-   * 4. [ ] Comenzar con el video
+   * 5. [ ] Comenzar con el video
    *      - Validar video
    *      - Crear directorios
    *      - Ejecutar opciones elegidas antes
@@ -171,8 +172,10 @@ export async function fullProcess () {
     }
   }
 
-  // 3.a Preguntar las resoluciones
+  // 4. Preparaciones finales
 
+  // 4.1 Preguntar las resoluciones (si lo marcó antes)
+  
   let resolutions: Resolution[] | null = null
 
   // Las resoluciones van en base a lo preguntado o por defecto
@@ -182,9 +185,9 @@ export async function fullProcess () {
     resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
   }
 
-  // 4. Comenzar con el video
+  // 5. Comenzar con el video
   
-  // 4.1 Validar video
+  // 5.1 Validar video
   
   if (!getProcessParam('skipValidation')) {
     let validation: Validation
@@ -205,12 +208,12 @@ export async function fullProcess () {
     await saveVideoInListOfSuggestions(video.id, video.title)
   }
 
-  // 4.2 Crear directorios
+  // 5.2 Crear directorios
 
   const createDirectoriesPromise = createDirectories(video.id)
   await oraPromise(createDirectoriesPromise, { text: `Creando directorios para ${video.id}`, successText: `Directorios para ${video.id} creados` })
   
-  // 4.3.a Descargar video
+  // 5.3.a Descargar video
 
   if (video.options.downloadVideo) {
     let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
