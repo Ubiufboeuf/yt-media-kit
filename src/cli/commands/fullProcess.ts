@@ -33,7 +33,9 @@ export async function fullProcess () {
    *      - Re-sincronizar audio+video (mux/demux)
    *      - Obtener información
    *      - Descargar thumbnails/assets
-   *      - Preguntar por resoluciones
+   *      - Preguntar si preguntar las resoluciones
+   * 
+   * 3.a. [ ] Preguntar las resoluciones (si lo marcó antes)
    * 
    * 4. [ ] Comenzar con el video
    *      - Validar video
@@ -113,7 +115,7 @@ export async function fullProcess () {
       {
         title: 'Descargar video',
         description: 'Si lo desactivas buscará si tienes el video descargado, con audio, o alguna resolución de este, y sino, se cancelará el proceso',
-        value: response.downloadVideos,
+        value: response.downloadVideo,
         selected: true
       },
       {
@@ -169,6 +171,17 @@ export async function fullProcess () {
     }
   }
 
+  // 3.a Preguntar las resoluciones
+
+  let resolutions: Resolution[] | null = null
+
+  // Las resoluciones van en base a lo preguntado o por defecto
+  if (video.options.askForResolutions) {
+    resolutions = await askForResolution()
+  } else {
+    resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
+  }
+
   // 4. Comenzar con el video
   
   // 4.1 Validar video
@@ -193,20 +206,13 @@ export async function fullProcess () {
   }
 
   // 4.2 Crear directorios
+
   const createDirectoriesPromise = createDirectories(video.id)
   await oraPromise(createDirectoriesPromise, { text: `Creando directorios para ${video.id}`, successText: `Directorios para ${video.id} creados` })
-
+  
   // 4.3.a Descargar video
+
   if (video.options.downloadVideo) {
-    let resolutions: Resolution[] | null = null
-
-    // Las resoluciones van en base a lo preguntado o por defecto
-    if (video.options.askForResolutions) {
-      resolutions = await askForResolution()
-    } else {
-      resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
-    }
-
     let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
     try {
       maxResolutionToDownload = await getMaxResolutionToDownload(resolutions)

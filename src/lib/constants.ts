@@ -123,7 +123,7 @@ export const Rutas_para_borrar = {
 }
 
 export const response = {
-  downloadVideos: 'downloadVideos',
+  downloadVideo: 'downloadVideo',
   askForResolutions: 'askForResolutions',
   forceDownloadVideo: 'forceDownloadVideo',
   forceDownloadAudio: 'forceDownloadAudio',
