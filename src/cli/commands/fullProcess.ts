@@ -168,7 +168,6 @@ export async function fullProcess () {
 
     let id = ''
     if (URL.canParse(input)) {
-      console.log('valid?', input)
       const idFromUrl = getVideoIdFromUrl(input)
       if (idFromUrl) id = idFromUrl
     } else {
