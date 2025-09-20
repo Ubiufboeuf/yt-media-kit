@@ -2,11 +2,6 @@ import { readdir } from 'node:fs/promises'
 import { Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { spawnAsync } from 'src/utils/spawnAsync'
-import * as readline from 'node:readline/promises'
-import { stdin as input, stdout as output } from 'node:process'
-import { getVideoSize } from 'src/utils/videoMetadata'
-
-const rl = readline.createInterface({ input, output })
 
 export async function muxVideoAndAudio (videoId: string) {
   let videosConAudio: string[] = []
