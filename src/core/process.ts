@@ -101,26 +101,33 @@ export function setProcessParam (param: SearchProcessParams, value: boolean) {
   }
 }
 
+export function isValidProcessParamKey  (key: string): key is keyof typeof process.params {
+  return key in process.params
+}
+
 export function getProcessParam (param: SearchProcessParams) {
   if (Object.keys(process.params).includes(param)) {
     return process.params[param]
   }
 }
 
-export function loadProcessParams (): ProcessParams {
-  const isDevMode = argv.some((a) => a.toLowerCase() === Arguments.dev)
-  setProcessParam('isDevMode', isDevMode)
-  
+export function loadProcessParams (): ProcessParams {  
   const skipValidation = argv.some((a) => a.toLowerCase() === Arguments.skipValidation)
-  setProcessParam('skipValidation', skipValidation)
-
   const useDefaultVideo = argv.some((a) => a.toLowerCase() === Arguments.useDefaultVideo)
-  setProcessParam('useDefaultVideo', useDefaultVideo)
+  const isDevMode = argv.some((a) => a.toLowerCase() === Arguments.dev)
 
-  return {
-    ...(isDevMode ? devParams : {}),
-    isDevMode,
+  const processParams = {
     skipValidation,
-    useDefaultVideo
+    useDefaultVideo,
+    isDevMode,
+    ...(isDevMode ? devParams : {})
   }
+
+  for (const [key, param] of Object.entries(processParams)) {
+    if (isValidProcessParamKey(key)) {
+      setProcessParam(key, param)
+    }
+  }
+  
+  return processParams
 }
