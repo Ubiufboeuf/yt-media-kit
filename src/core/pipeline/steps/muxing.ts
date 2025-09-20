@@ -17,7 +17,6 @@ export async function muxVideoAndAudio (videoId: string) {
   }
 
   const videoConAudio = videosConAudio.find((file) => file.includes(videoId))
-  console.log({ videoConAudio })
 
   if (videoConAudio) {
     let videoResolution
@@ -66,10 +65,9 @@ export async function muxVideoAndAudio (videoId: string) {
 
   const audio = audios.find((file) => file.includes(videoId))
   const ffmpegParams = ['-i', `${Rutas.videos_descargados}/${video}`, '-i', `${Rutas.audios_descargados}/${audio}`, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'libopus', '-strict', 'experimental', '-shortest', `${Rutas.videos_con_audio}/${videoId}.mp4`]
-  console.log(ffmpegParams)
 
   try {
-    await spawnAsync('ffmpeg', ffmpegParams, true)
+    await spawnAsync('ffmpeg', ffmpegParams)
   } catch (err) {
     errorHandler(err, 'Error uniendo video con audio')
   }
@@ -84,6 +82,5 @@ export async function demuxVideoAndAudio (videoId: string) {
   }
 
   const videoConAudio = videos.find((file) => file.includes(videoId))
-  console.log(videoConAudio)
   // const ffmpegParams = ['-i', videoConAudio]
 }

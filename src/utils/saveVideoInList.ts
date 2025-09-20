@@ -26,8 +26,6 @@ export async function saveVideoInListOfSuggestions (videoId: string, title: stri
     { id: videoId, title: title.replaceAll('\n', '') }
   ]
 
-  console.log('newList', newList)
-
   try {
     await oraPromise(writeFile(`${Rutas.suggest_list}`, JSON.stringify(newList, null, 2)), { text: 'Guardando...', successText: 'Texto guardado' })
   } catch (err) {
