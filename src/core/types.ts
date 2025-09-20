@@ -11,10 +11,13 @@ export interface ProcessParams {
   useDefaultVideo: boolean
 }
 
-export interface Video {
-	id: string
+export interface VideoData {
 	title: string,
 	options: VideoOptions
+}
+
+export interface Video extends VideoData {
+	id: string
 }
 
 export interface VideoOptions {
