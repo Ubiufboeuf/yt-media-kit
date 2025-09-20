@@ -34,8 +34,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 # Específico del proyecto
-storage/*/*
-test/**
+storage/
 
 # Configuración del editor
 .vscode/*
