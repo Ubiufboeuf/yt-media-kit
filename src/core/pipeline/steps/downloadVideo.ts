@@ -14,8 +14,7 @@ export async function askForResolution () {
     name: 'value',
     message: 'Elige las resoluciones del video',
     type: 'multiselect',
-    hint: 'Todas las opciones se descargan sin audio',
-    instructions: false,
+    instructions: 'Muevete con ↑↓ y elige con enter',
     choices: [
       { title: 'Rendimiento (mínimo)', description: 'Usa la mínima resolución o descarga en 144p y lo deja en 32p', value: { download: '144p', desired: '32p', downloadNumber: 144, desiredNumber: 32 } },
       { title: 'Música (bajo)', description: 'Descarga el video en 144p', value: { download: '144p', desired: '144p', downloadNumber: 144, desiredNumber: 144 } },
