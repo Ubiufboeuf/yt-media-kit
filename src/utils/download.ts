@@ -2,7 +2,7 @@ import type { Resolution } from '../env'
 import { errorHandler } from './errorHandler'
 import { spawnAsync } from './spawnAsync'
 import { Rutas } from '../lib/constants'
-import { readdirSync, unlinkSync } from 'node:fs'
+import { readdirSync, renameSync, unlinkSync } from 'node:fs'
 import { getResolutionId } from '../core/pipeline/steps/downloadVideo'
 import { getAudioId } from '../core/pipeline/steps/downloadAudio'
 
@@ -41,8 +41,8 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
 
     if (forceDownload) {
       const audios = readdirSync(Rutas.audios_descargados)
-      if (audios.includes(`${videoId}.mp4`)) {
-        unlinkSync(`${Rutas.audios_descargados}/${videoId}.mp4`)
+      if (audios.includes(`${videoId}.opus`)) {
+        renameSync(`${Rutas.audios_descargados}/${videoId}.opus`, `${Rutas.audios_descargados}/${videoId}.old.opus`)
       }
     }
 
@@ -53,7 +53,10 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     }
 
     const audios = readdirSync(Rutas.audios_descargados)
-    if (audios.includes(`${videoId}.mp4`)) {
+    if (audios.includes(`${videoId}.opus`)) {
+      if (audios.includes(`${videoId}.old.opus`)) {
+        unlinkSync(`${Rutas.audios_descargados}/${videoId}.old.opus`)
+      }
       return true
     }
     return false
