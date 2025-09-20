@@ -107,7 +107,7 @@ export async function fullProcess () {
         description: 'Consigue diferentes resoluciones de la caratula del video',
         value: response.getThumbnails,
         selected: true
-      },
+      }
     ]
   })
 

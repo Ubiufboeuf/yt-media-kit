@@ -19,7 +19,7 @@ export async function saveVideoInListOfSuggestions (videoId: string, title: stri
     throw errorHandler(err, 'Error parseando la lista de sugerencias')
   }
 
-  if (list.some(video => video.id === videoId)) return
+  if (list.some((video) => video.id === videoId)) return
   
   const newList: List = [
     ...list,

@@ -19,7 +19,7 @@ export async function getAudioId (videoId: string) {
   const best_id = { id: '', size: '', sizeInMiB: 0, tbr: '', tbrNumber: 0 }
 
   for (const line of lines) {
-    const [part1, part2, part3] = line.split('|').map(p => p.trim())
+    const [part1, part2, part3] = line.split('|').map((p) => p.trim())
     if (!part1 || !part2 || !part3) continue
     
     const [id, , res] = part1.split(' ')
@@ -49,7 +49,7 @@ export async function getAudioId (videoId: string) {
 
 export async function descargarAudio (videoId: string, forceDownload: boolean = false) {
   const audiosPorProcesar = readdirSync(Rutas.audios_descargados)
-  const existeAudio = audiosPorProcesar.some(f => f.includes(videoId))
+  const existeAudio = audiosPorProcesar.some((f) => f.includes(videoId))
 
   if (!forceDownload && existeAudio) {
     console.log(chalk.gray('\n(Ya existe el audio, omitiendo)'))

@@ -28,6 +28,6 @@ export function say (text: string, options: CFontsSettings) {
 
 function parseColors (colors: (keyof Colors)[]) {
   const arr: string[] = []
-  colors.forEach(color => arr.push(COLORS[color]))
+  colors.forEach((color) => arr.push(COLORS[color]))
   return arr
 }

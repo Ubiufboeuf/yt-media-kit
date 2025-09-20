@@ -75,7 +75,7 @@ export async function getResolutionId (videoId: string, download: string) {
   const best_id = { id: '', size: '', sizeInMiB: 0, tbr: '', tbrNumber: 0 }
 
   for (const line of lines) {
-    const [part1, part2, part3] = line.split('|').map(p => p.trim())
+    const [part1, part2, part3] = line.split('|').map((p) => p.trim())
     if (!part1 || !part2 || !part3) continue
     
     const [id, , res] = part1.split(' ')
@@ -112,7 +112,7 @@ export async function descargarVideo (videoId: string, resolutions: Resolution[]
     errorHandler(err, 'Error leyendo los videos descargados')
   }
 
-  if (!videosDescargados.some(file => file.includes(videoId))) {
+  if (!videosDescargados.some((file) => file.includes(videoId))) {
     // Si no hay videos descargados con este id, descarga la máxima resolución que quiere el usuario
     await download('video', videoId, forceDownload, maxResToDownload)
     return

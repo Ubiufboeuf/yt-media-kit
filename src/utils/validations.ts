@@ -2,7 +2,7 @@ import { spawnAsync } from '../utils/spawnAsync'
 // import { writ>eFileSync } from 'node:fs'
 import { oraPromise } from 'ora'
 import { getVideoIdFromUrl } from './readUrl'
-import { Validation } from 'src/env'
+import type { Validation } from 'src/env'
 import { errorHandler } from './errorHandler'
 
 export async function validateVideoId (video: string | URL): Promise<Validation> {

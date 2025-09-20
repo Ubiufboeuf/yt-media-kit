@@ -15,7 +15,7 @@ export async function clearAll () {
   (Si quieres hacer esto debes escribir: Estoy seguro, borra TODO)\n`,
     type: 'text',
     name: 'input',
-    validate: input => input === FRASE_DE_SEGURIDAD ? true : 'Debes escribir exáctamente: Estoy seguro, borra TODO'
+    validate: (input) => input === FRASE_DE_SEGURIDAD ? true : 'Debes escribir exáctamente: Estoy seguro, borra TODO'
   })
 
   if (preguntaPorSeguridad.input === FRASE_DE_SEGURIDAD) {

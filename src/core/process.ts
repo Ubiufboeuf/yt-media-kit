@@ -1,5 +1,5 @@
-import { Process, SearchProcessParams, Video, VideoData } from 'src/core/types'
-import { ProcessParams } from 'src/core/types'
+import type { Process, SearchProcessParams, Video, VideoData } from 'src/core/types'
+import type { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/lib/constants'
 import { argv } from 'node:process'
 
@@ -108,13 +108,13 @@ export function getProcessParam (param: SearchProcessParams) {
 }
 
 export function loadProcessParams (): ProcessParams {
-  const isDevMode = argv.some(a => a.toLowerCase() === Arguments.dev)
+  const isDevMode = argv.some((a) => a.toLowerCase() === Arguments.dev)
   setProcessParam('isDevMode', isDevMode)
   
-  const skipValidation = argv.some(a => a.toLowerCase() === Arguments.skipValidation)
+  const skipValidation = argv.some((a) => a.toLowerCase() === Arguments.skipValidation)
   setProcessParam('skipValidation', skipValidation)
 
-  const useDefaultVideo = argv.some(a => a.toLowerCase() === Arguments.useDefaultVideo)
+  const useDefaultVideo = argv.some((a) => a.toLowerCase() === Arguments.useDefaultVideo)
   setProcessParam('useDefaultVideo', useDefaultVideo)
 
   return {
