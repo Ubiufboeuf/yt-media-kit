@@ -22,12 +22,7 @@ export async function fullProcess () {
    * 1. [x] Modo del programa: Completo
    *      - Completo / Solo descargar / Video+Audio / Personalizado
    * 
-   * 2. [x] Forma de elegir el video
-   *      - Escribir ID
-   *      - Escribir la url
-   *      - Usar lista de sugeridos
-   * 
-   * 3. [x] Opciones para ejecutar el programa
+   * 2. [x] Opciones para ejecutar el programa
    *      - Descargar video
    *      - Forzar descarga video/audio
    *      - Re-sincronizar audio+video (mux/demux)
@@ -35,11 +30,18 @@ export async function fullProcess () {
    *      - Descargar thumbnails/assets
    *      - Preguntar si preguntar las resoluciones
    * 
-   * 4. [ ] Preparaciones finales
+   * 3. [x] Opcional
    *      - Preguntar las resoluciones (si lo marcó antes)
    * 
-   * 5. [ ] Comenzar con el video
-   *      - Validar video
+   * 4. [x] Forma de elegir el video
+   *      - Escribir ID
+   *      - Escribir la url
+   *      - Usar lista de sugeridos
+   * 
+   * 5. [x] Antes de empezar
+   *      - Validar video (si falla volver a la pregunta anterior)
+   * 
+   * 6. [ ] Comenzar con el video
    *      - Crear directorios
    *      - Ejecutar opciones elegidas antes
    */
