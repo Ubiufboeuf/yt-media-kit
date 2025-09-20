@@ -9,7 +9,7 @@ import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/
 import { response, Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { getVideoIdFromUrl } from 'src/utils/readUrl'
-import { addNewVideo, getProcessParam } from 'src/core/process'
+import { addNewVideo, getProcessParam, VideoDraft } from 'src/core/process'
 import { validateVideoId } from 'src/utils/validations'
 import { saveVideoInListOfSuggestions } from 'src/utils/saveVideoInList'
 import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
@@ -46,67 +46,13 @@ export async function fullProcess () {
    *      - Ejecutar opciones elegidas antes
    */
 
-  ; // <- Ese punto y coma es para evitar que la descripción de videoChoice cambie por los comentarios de arriba
-  
-  // 2. Forma de elegir el video
+  ; // <- Ese punto y coma es para evitar que la descripción de lo de abajo cambie por los comentarios de arriba
 
-  let video: Video | null = null
-  
-  const videoChoice = await prompts({
-    message: 'Elige una opción',
-    type: 'autocomplete',
-    name: 'value',
-    initial: 'id',
-    choices: [
-      { title: 'Escribir el ID', value: 'id' },
-      { title: 'URL del video', value: 'url', description: 'Si es de una lista usará el que se esté reproduciendo' },
-      // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres
-      ...list.map(({ id, title }) => ({ title: id, value: id, description: title }))
-    ]
-  })
+  const videoDraft = new VideoDraft()
 
-  if (videoChoice.value === 'id') {
-    const id = await prompts({
-      message: 'ID del video',
-      type: 'text',
-      name: 'value',
-      initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
-      validate: (value) => {
-        if (!value || !value.trim()) {
-          return 'No puedes ingresar un texto vacío como id'
-        }
-        return true
-      }
-    })
-    
-    video = addNewVideo(id.value)
-  } else if (videoChoice.value === 'url') {
-    let id: string | null = null
-    const url = await prompts({
-      message: 'ID del video',
-      type: 'text',
-      name: 'value',
-      initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
-      validate: (value) => {
-        id = getVideoIdFromUrl(url.value)
-        if (!value || !value.trim()) {
-          return 'No puedes ingresar un texto vacío como url'
-        } else if (!id) {
-          return 'Esa url no tiene un id válido'
-        }
-        return true
-      }
-    })
 
-    if (!id) return // <- por la validación de antes no debería llegar a acá
-    video = addNewVideo(id)
-  } else {
-    video = addNewVideo(videoChoice.value)
-  }
-
-  if (!video || !video?.id) return
-
-  // 3. Opciones para ejecutar el programa
+  // - - - - - - - - - - - - - - - - - - -
+  // 2. Opciones para ejecutar el programa
 
   // Seleccionar opciones para el programa
   const optionsResponse = await prompts({
@@ -170,26 +116,90 @@ export async function fullProcess () {
   for (const opcionElegida of optionsResponse.value as (keyof VideoOptions)[]) {
     const keys = Object.keys(response)
     if (keys.includes(opcionElegida)) {
-      video.options[opcionElegida] = true
+      videoDraft.options[opcionElegida] = true
     }
   }
 
-  // 4. Preparaciones finales
 
-  // 4.1 Preguntar las resoluciones (si lo marcó antes)
+  // - - - - - -
+  // 3. Opcional
+
+  // 3.1 Preguntar las resoluciones (si lo marcó antes)
   
   let resolutions: Resolution[] | null = null
 
-  // Las resoluciones van en base a lo preguntado o por defecto
-  if (video.options.askForResolutions) {
+  // Las resoluciones van en base a lo preguntado, o sino por defecto (360p)
+  if (videoDraft.options.askForResolutions) {
     resolutions = await askForResolution()
   } else {
     resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
   }
-
-  // 5. Comenzar con el video
   
-  // 5.1 Validar video
+
+  // - - - - - - - - - - - - - -
+  // 4. Forma de elegir el video
+  
+  let video: Video | null = null
+  
+  const videoChoice = await prompts({
+    message: 'Elige una opción',
+    type: 'autocomplete',
+    name: 'value',
+    initial: 'id',
+    choices: [
+      { title: 'Escribir el ID', value: 'id' },
+      { title: 'URL del video', value: 'url', description: 'Si es de una lista usará el que se esté reproduciendo' },
+      // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres
+      ...list.map(({ id, title }) => ({ title: id, value: id, description: title }))
+    ]
+  })
+
+  if (videoChoice.value === 'id') {
+    const id = await prompts({
+      message: 'ID del video',
+      type: 'text',
+      name: 'value',
+      initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
+      validate: (value) => {
+        if (!value || !value.trim()) {
+          return 'No puedes ingresar un texto vacío como id'
+        }
+        return true
+      }
+    })
+    
+    video = addNewVideo(id.value)
+  } else if (videoChoice.value === 'url') {
+    let id: string | null = null
+    const url = await prompts({
+      message: 'ID del video',
+      type: 'text',
+      name: 'value',
+      initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
+      validate: (value) => {
+        id = getVideoIdFromUrl(url.value)
+        if (!value || !value.trim()) {
+          return 'No puedes ingresar un texto vacío como url'
+        } else if (!id) {
+          return 'Esa url no tiene un id válido'
+        }
+        return true
+      }
+    })
+
+    if (!id) return // <- por la validación de antes no debería llegar a acá
+    video = addNewVideo(id)
+  } else {
+    video = addNewVideo(videoChoice.value)
+  }
+
+  if (!video || !video?.id) return
+
+
+  // - - - - - - - - - -
+  // 5. Antes de empezar
+
+  // 5.1 Validar video (si falla volver a la pregunta anterior)
   
   if (!getProcessParam('skipValidation')) {
     let validation: Validation
@@ -210,12 +220,18 @@ export async function fullProcess () {
     await saveVideoInListOfSuggestions(video.id, video.title)
   }
 
-  // 5.2 Crear directorios
+
+  // - - - - - - - - - - - -
+  // 6. Comenzar con el video
+
+  // 6.1 Crear directorios
 
   const createDirectoriesPromise = createDirectories(video.id)
   await oraPromise(createDirectoriesPromise, { text: `Creando directorios para ${video.id}`, successText: `Directorios para ${video.id} creados` })
   
-  // 5.3.a Descargar video
+  // 6.2 Ejecutar opciones elegidas antes
+
+  // 6.2.a Descargar video
 
   if (video.options.downloadVideo) {
     let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
