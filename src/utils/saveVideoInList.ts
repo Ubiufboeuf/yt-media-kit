@@ -27,7 +27,7 @@ export async function saveVideoInListOfSuggestions (videoId: string, title: stri
   ]
 
   try {
-    await oraPromise(writeFile(`${Rutas.suggest_list}`, JSON.stringify(newList, null, 2)), { text: 'Guardando...', successText: 'Texto guardado' })
+    await oraPromise(writeFile(`${Rutas.suggest_list}`, JSON.stringify(newList, null, 2)), { text: 'Guardando video en lista...', successText: 'Lista de videos sugeridos actualizada' })
   } catch (err) {
     errorHandler(err, 'Error guardando el video en la lista de sugerencias')
   }
