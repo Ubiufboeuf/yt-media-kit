@@ -55,7 +55,7 @@ export async function fullProcess () {
   // 2. Opciones para ejecutar el programa
 
   const optionsResponse = await prompts({
-    message: 'Elije las opciones para ejecutar el programa',
+    message: 'Elige las opciones para ejecutar el programa',
     type: 'multiselect',
     name: 'value',
     instructions: 'Muevete con ↑↓, selecciona con espacio y continua con enter',

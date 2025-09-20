@@ -19,7 +19,7 @@ if (params.isDevMode) {
 }
 
 const processMode = await prompts({
-  message: 'Elije el modo del programa',
+  message: 'Elige el modo del programa',
   type: 'select',
   name: 'option',
   choices: [

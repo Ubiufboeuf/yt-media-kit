@@ -12,7 +12,7 @@ import chalk from 'chalk'
 export async function askForResolution () {
   const res = await prompts({
     name: 'value',
-    message: 'Elije las resoluciones para descargar',
+    message: 'Elige las resoluciones para descargar',
     type: 'multiselect',
     hint: 'Todas las opciones se descargan junto al audio',
     instructions: false,
