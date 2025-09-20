@@ -147,54 +147,42 @@ export async function fullProcess () {
     name: 'value',
     initial: 'id',
     choices: [
-      { title: 'Escribir el ID', value: 'id' },
-      { title: 'URL del video', value: 'url', description: 'Si es de una lista usará el que se esté reproduciendo' },
-      // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres
+      { title: 'Escribir el ID o URL', value: 'custom', description: 'Si es la URL de una lista se conseguirá el ID del video que se esté reproduciendo' },
+      // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres de los títulos
       ...list.map(({ id, title }) => ({ title: id, value: id, description: title }))
     ]
   })
 
-  if (videoChoice.value === 'id') {
-    const id = await prompts({
-      message: 'ID del video',
+  if (videoChoice.value === 'custom') {
+    const { value: input } = await prompts({
+      message: 'ID o URL del video',
       type: 'text',
       name: 'value',
       initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
       validate: (value) => {
         if (!value || !value.trim()) {
-          return 'No puedes ingresar un texto vacío como id'
-        }
-        return true
-      }
-    })
-    
-    video = addNewVideo(id.value)
-  } else if (videoChoice.value === 'url') {
-    let id: string | null = null
-    const url = await prompts({
-      message: 'ID del video',
-      type: 'text',
-      name: 'value',
-      initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
-      validate: (value) => {
-        id = getVideoIdFromUrl(url.value)
-        if (!value || !value.trim()) {
-          return 'No puedes ingresar un texto vacío como url'
-        } else if (!id) {
-          return 'Esa url no tiene un id válido'
+          return 'No puedes ingresar un texto vacío'
         }
         return true
       }
     })
 
-    if (!id) return // <- por la validación de antes no debería llegar a acá
+    let id = ''
+    if (URL.canParse(input)) {
+      console.log('valid?', input)
+      const idFromUrl = getVideoIdFromUrl(input)
+      if (idFromUrl) id = idFromUrl
+    } else {
+      id = input
+    }
+    
     video = addNewVideo(id)
   } else {
     video = addNewVideo(videoChoice.value)
   }
 
   if (!video || !video?.id) return
-
+  
 
   // - - - - - - - - - -
   // 5. Antes de empezar
