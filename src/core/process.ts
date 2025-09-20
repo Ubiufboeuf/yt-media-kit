@@ -1,4 +1,4 @@
-import { Process, SearchProcessParams, Video } from 'src/core/types'
+import { Process, SearchProcessParams, Video, VideoData } from 'src/core/types'
 import { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/lib/constants'
 import { argv } from 'node:process'
@@ -39,7 +39,7 @@ export class VideoDraft {
   }
 }
 
-export function addNewVideo (id?: string | null, videoData?: Video): Video {
+export function addNewVideo (id: string, videoData?: VideoData): Video {
   if (!id) {
     throw new Error('Falta el id del video')
   }
