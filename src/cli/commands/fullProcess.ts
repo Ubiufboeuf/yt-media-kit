@@ -47,14 +47,13 @@ export async function fullProcess () {
    */
 
   ; // <- Ese punto y coma es para evitar que la descripción de lo de abajo cambie por los comentarios de arriba
-
+  
   const videoDraft = new VideoDraft()
 
 
   // - - - - - - - - - - - - - - - - - - -
   // 2. Opciones para ejecutar el programa
 
-  // Seleccionar opciones para el programa
   const optionsResponse = await prompts({
     message: 'Elije las opciones para ejecutar el programa',
     type: 'multiselect',
@@ -68,14 +67,14 @@ export async function fullProcess () {
         selected: true
       },
       {
-        title: 'Preguntar por resoluciones',
-        description: 'Pregunta por las resoluciones al momento de descargar los videos, y sino descarga 360p',
+        title: 'Preguntar resoluciones',
+        description: 'Pregunta por las resoluciones que quieras tener, y sino elige 360p',
         value: response.askForResolutions,
         selected: true
       },
       {
         title: 'Sobreescribir descarga de video',
-        description: 'Fuerza una descarga de la/s resoluciones, incluso si ya existen',
+        description: 'Fuerza una descarga del video, incluso si ya existe',
         value: response.forceDownloadVideo,
         selected: false
       },
@@ -87,19 +86,19 @@ export async function fullProcess () {
       },
       {
         title: 'Sincronizar video con audio',
-        description: 'Unir y separar video con audio',
+        description: `Unir y separar video con audio antes de crear las resoluciones. Guarda el video con audio en ${Rutas.videos_con_audio}/`,
         value: response.syncVideoAndAudio,
         selected: true
       },
       {
-        title: 'Sobreescribir video sincroinzado',
-        description: 'Fuerza la mezcla del video con el audio incluso si ya se tiene. Depende de la anterior opción marcada',
+        title: 'Sobreescribir video sincronizado',
+        description: 'Fuerza la mezcla del video con el audio, incluso si ya existe. Depende de la opción anterior marcada',
         value: response.forceSync,
         selected: false
       },
       {
         title: 'Obtener datos e información del video',
-        description: 'Consigue información detallada del video en base a youtube (yt-dlp)',
+        description: 'Consigue información detallada del video en base a yt-dlp',
         value: response.getVideoData,
         selected: true
       },
@@ -134,11 +133,11 @@ export async function fullProcess () {
   } else {
     resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
   }
-  
 
+  
   // - - - - - - - - - - - - - -
   // 4. Forma de elegir el video
-  
+
   let video: Video | null = null
   
   const videoChoice = await prompts({
