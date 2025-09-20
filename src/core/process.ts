@@ -29,6 +29,16 @@ const DEFAULT_VIDEO_OPTIONS = {
   getThumbnails: false
 }
 
+export class VideoDraft {
+  title = 'unknown'
+  options = DEFAULT_VIDEO_OPTIONS
+
+  setVideoData (videoData: VideoData) {
+    this.title = videoData.title
+    this.options = videoData.options
+  }
+}
+
 export function addNewVideo (id?: string | null, videoData?: Video): Video {
   if (!id) {
     throw new Error('Falta el id del video')
