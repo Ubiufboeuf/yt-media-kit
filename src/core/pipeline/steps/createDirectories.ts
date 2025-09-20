@@ -12,5 +12,6 @@ export async function createDirectories (videoId: string) {
   await mkdirp(`${Rutas.completos}/${videoId}`)
   await mkdirp(`${Rutas.assets}/${videoId}`)
 
-  await writeFile(`${Rutas.info}/${videoId}.json`, '')
+  await mkdirp(`${Rutas.info}`)
+  await writeFile(`${Rutas.info}/${videoId}.json`, '{}')
 }
