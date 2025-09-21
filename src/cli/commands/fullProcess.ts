@@ -97,6 +97,12 @@ export async function fullProcess () {
         selected: false
       },
       {
+        title: 'Crear stream del video en formato DASH',
+        description: 'Crea un stream del video, separándolo en fragmentos y creando un manifest de ellos. Ideal para un reproductor de video via streaming como YouTube o Twitch',
+        value: response.createDashStream,
+        selected: true
+      },
+      {
         title: 'Obtener datos e información del video',
         description: 'Consigue información detallada del video en base a yt-dlp',
         value: response.getVideoData,

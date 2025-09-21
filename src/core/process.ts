@@ -25,6 +25,7 @@ const DEFAULT_VIDEO_OPTIONS = {
   forceDownloadAudio: false,
   syncVideoAndAudio: false,
   forceSync: false,
+  createDashStream: false,
   getVideoData: false,
   getThumbnails: false
 }
