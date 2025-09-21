@@ -1,3 +1,5 @@
+import type { Video } from './process'
+
 export interface Process {
   videos: Video[]
   params: ProcessParams
@@ -14,10 +16,6 @@ export interface ProcessParams {
 export interface VideoData {
 	title: string,
 	options: VideoOptions
-}
-
-export interface Video extends VideoData {
-	id: string
 }
 
 export interface VideoOptions {

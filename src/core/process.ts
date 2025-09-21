@@ -30,6 +30,11 @@ const DEFAULT_VIDEO_OPTIONS = {
   getThumbnails: false
 }
 
+const DEFAULT_VIDEO_DATA: VideoData = {
+  title: 'title_unknown',
+  options: DEFAULT_VIDEO_OPTIONS
+}
+
 export class VideoDraft {
   title = 'unknown'
   options = DEFAULT_VIDEO_OPTIONS
@@ -37,6 +42,21 @@ export class VideoDraft {
   setVideoData (videoData: VideoData) {
     this.title = videoData.title
     this.options = videoData.options
+  }
+}
+
+export class Video extends VideoDraft {
+  id = ''
+
+  constructor (id: string, videoData?: VideoData) {
+    if (!id) {
+      throw new Error('Falta especificar el id del video')
+    }
+    
+    super()
+
+    this.id = id
+    this.setVideoData(videoData ?? DEFAULT_VIDEO_DATA)
   }
 }
 
@@ -49,12 +69,7 @@ export function addNewVideo (id: string, videoData?: VideoData): Video {
     throw new Error('El video ya está en la lista')
   }
 
-  const newVideo = {
-    ...videoData,
-    id,
-    title: '',
-    options: DEFAULT_VIDEO_OPTIONS
-  }
+  const newVideo = new Video(id, videoData)
 
   process.videos.push(newVideo)
   
