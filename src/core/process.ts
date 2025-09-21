@@ -40,17 +40,12 @@ const DEFAULT_RESOLUTIONS: Resolution[] = [
 
 export class VideoDraft {
   id = ''
-  title = 'unknown'
+  title = 'unknown_title'
   options = DEFAULT_VIDEO_OPTIONS
   resolutions = DEFAULT_RESOLUTIONS
 
   constructor (id: string) {
     this.id = id
-  }
-  
-  protected setVideoData (draft: VideoDraft) {
-    this.title = draft.title
-    this.options = draft.options
   }
 }
 
@@ -73,7 +68,9 @@ export class Video extends VideoDraft {
     super(draft.id)
 
     this.ytId = ytId
-    this.setVideoData(draft)
+    this.title = draft.title
+    this.options = draft.options
+    this.resolutions = draft.resolutions
   }
 }
 
@@ -101,7 +98,7 @@ export function addNewVideo (ytId: string, draft?: VideoDraft): Video {
   return newVideo
 }
 
-export function getVideoDataById (id: string) {
+export function getVideoById (id: string) {
   const video = process.videos.find((video) => video.id === id)
 
   if (!video) {
