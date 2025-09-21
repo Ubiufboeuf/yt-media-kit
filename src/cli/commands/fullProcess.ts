@@ -255,4 +255,28 @@ export async function fullProcess () {
     const demuxVideoAndAudioPromise = demuxVideoAndAudio(video.id)
     await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: `Audio y video separados en ${Rutas.videos}/${video.id}.mp4 y ${Rutas.audios}/${video.id}.opus`, failText: 'No se pudieron separar el audio y el video' })
   }
+
+  // 6.2.c Crear resoluciones extra
+
+  if (video) {
+    // Resoluciones
+  }
+
+  // 6.2.d Crear stream DASH
+
+  if (video.options.createDashStream) {
+    //
+  }
+
+  // 6.2.e Obtener información
+
+  if (video.options.getVideoData) {
+    //
+  }
+
+  // 6.2.f Descargar thumbnails/assets
+
+  if (video.options.getThumbnails) {
+    //
+  }
 }
