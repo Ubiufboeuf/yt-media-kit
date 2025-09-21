@@ -2,6 +2,7 @@ import type { Process, SearchProcessParams, VideoOptions } from 'src/core/types'
 import type { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/lib/constants'
 import { argv } from 'node:process'
+import type { Resolution } from 'src/env'
 
 const process: Process = {
   videos: [],
@@ -30,10 +31,18 @@ const DEFAULT_VIDEO_OPTIONS: VideoOptions = {
   getThumbnails: false
 }
 
+const DEFAULT_RESOLUTIONS: Resolution[] = [
+  {
+    download: '360p', desired: '360p',
+    downloadNumber: 360, desiredNumber: 360
+  }
+]
+
 export class VideoDraft {
   id = ''
   title = 'unknown'
   options = DEFAULT_VIDEO_OPTIONS
+  resolutions = DEFAULT_RESOLUTIONS
 
   constructor (id: string) {
     this.id = id
@@ -121,6 +130,21 @@ export function updateVideoData (id: string, newVideoData: Video) {
   }
 
   return newVideo
+}
+
+export function isValidResolution (r: unknown): r is Resolution {
+  return (
+    typeof r === 'object' &&
+    r !== null &&
+    'download' in r &&
+    'desired' in r &&
+    'downloadNumber' in r &&
+    'desiredNumber' in r &&
+    typeof r.download === 'string' &&
+    typeof r.desired === 'string' &&
+    typeof r.downloadNumber === 'number' &&
+    typeof r.desiredNumber === 'number'
+  )
 }
 
 export function getDefaultVideoOptions () {

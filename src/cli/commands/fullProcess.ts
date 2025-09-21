@@ -9,7 +9,7 @@ import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/
 import { response, Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { getVideoIdFromUrl } from 'src/utils/readUrl'
-import  { addNewVideo, getProcessParam, type Video, VideoDraft } from 'src/core/process'
+import  { addNewVideo, getProcessParam, isValidResolution, type Video, VideoDraft } from 'src/core/process'
 import { validateVideoId } from 'src/utils/validations'
 import { saveVideoInListOfSuggestions } from 'src/utils/saveVideoInList'
 import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
@@ -150,8 +150,10 @@ export async function fullProcess () {
   // Las resoluciones van en base a lo preguntado, o sino por defecto (360p)
   if (videoDraft.options.downloadVideo && videoDraft.options.askForResolutions) {
     resolutions = await askForResolution()
-  } else {
-    resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
+    }
+
+    if (resolutions?.length && resolutions.every((r) => isValidResolution(r))) { 
+      videoDraft.resolutions = resolutions
   }
 
   
