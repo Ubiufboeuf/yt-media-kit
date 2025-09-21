@@ -1,4 +1,4 @@
-import type { Process, SearchProcessParams, Video, VideoData } from 'src/core/types'
+import type { Process, SearchProcessParams, VideoData, VideoOptions } from 'src/core/types'
 import type { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/lib/constants'
 import { argv } from 'node:process'
@@ -20,7 +20,7 @@ const devParams: ProcessParams = {
   useDefaultVideo: true
 }
 
-const DEFAULT_VIDEO_OPTIONS = {
+const DEFAULT_VIDEO_OPTIONS: VideoOptions = {
   askForResolutions: false,
   downloadVideo: false,
   forceDownloadVideo: false,
