@@ -135,7 +135,7 @@ export async function fullProcess () {
   let resolutions: Resolution[] | null = null
 
   // Las resoluciones van en base a lo preguntado, o sino por defecto (360p)
-  if (videoDraft.options.askForResolutions) {
+  if (videoDraft.options.downloadVideo && videoDraft.options.askForResolutions) {
     resolutions = await askForResolution()
   } else {
     resolutions = [{ download: '360p', desired: '360p', desiredNumber: 360, downloadNumber: 360 }]
