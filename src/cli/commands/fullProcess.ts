@@ -18,7 +18,7 @@ import { videoContext } from 'src/core/context'
 const useDefaultVideo = getProcessParam('useDefaultVideo')
 
 export async function fullProcess () {
-  videoContext.run(crypto.randomUUID(), async () => {
+  videoContext.run({ id: crypto.randomUUID() }, async () => {
   /** = Preguntas =
    * 
    * 1. [x] Modo del programa: Completo
@@ -51,7 +51,18 @@ export async function fullProcess () {
 
   ; // <- Ese punto y coma es para evitar que la descripción de lo de abajo cambie por los comentarios de arriba
   
-  const videoDraft = new VideoDraft()
+    let context
+    try {  
+      context = videoContext.getStore()
+      if (!context?.id) {
+        throw new Error('Falta el id del contexto')
+      }
+    } catch (err) {
+      errorHandler(err)
+      return
+    }
+
+    const videoDraft = new VideoDraft(context.id)
 
 
   // - - - - - - - - - - - - - - - - - - -
