@@ -41,7 +41,7 @@ export class VideoDraft {
   title = 'unknown'
   options = DEFAULT_VIDEO_OPTIONS
 
-  setVideoData (videoData: VideoData) {
+  protected setVideoData (videoData: VideoData) {
     this.title = videoData.title
     this.options = videoData.options
   }
