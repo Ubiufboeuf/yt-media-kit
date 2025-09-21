@@ -24,11 +24,12 @@ export async function fullProcess () {
    * 
    * 2. [x] Opciones para ejecutar el programa
    *      - Descargar video
+   *      - Preguntar resoluciones
    *      - Forzar descarga video/audio
-   *      - Re-sincronizar audio+video (mux/demux)
+   *      - Sincronizar audio+video (mux/demux)
+   *      - Crear stream DASH
    *      - Obtener información
    *      - Descargar thumbnails/assets
-   *      - Preguntar si preguntar las resoluciones
    * 
    * 3. [x] Opcional
    *      - Preguntar las resoluciones (si lo marcó antes)
@@ -244,6 +245,8 @@ export async function fullProcess () {
     // const convertAudioPromise = convertirAudio(video.id, options.forceDownloadAudio)
     // await oraPromise(convertAudioPromise, { text: 'Convirtiendo audio', successText: 'Audio convertido', failText: 'No se pudo convertir el audio' })
   }
+
+  // 6.2.b Sincronizar audio+video (mux/demux)
 
   if (video.options.syncVideoAndAudio) { 
     const muxVideoAndAudioPromise = muxVideoAndAudio(video.id)
