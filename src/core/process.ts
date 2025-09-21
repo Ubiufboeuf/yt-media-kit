@@ -1,9 +1,7 @@
-import type { Process, SearchProcessParams, VideoData, VideoOptions } from 'src/core/types'
+import type { Process, SearchProcessParams, VideoOptions } from 'src/core/types'
 import type { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/lib/constants'
 import { argv } from 'node:process'
-import { videoContext } from './context'
-import type { AsyncLocalStorage } from 'node:async_hooks'
 
 const process: Process = {
   videos: [],
@@ -32,48 +30,62 @@ const DEFAULT_VIDEO_OPTIONS: VideoOptions = {
   getThumbnails: false
 }
 
-const DEFAULT_VIDEO_DATA: VideoData = {
-  title: 'title_unknown',
-  options: DEFAULT_VIDEO_OPTIONS
-}
-
 export class VideoDraft {
+  id = ''
   title = 'unknown'
   options = DEFAULT_VIDEO_OPTIONS
 
-  protected setVideoData (videoData: VideoData) {
-    this.title = videoData.title
-    this.options = videoData.options
+  constructor (id: string) {
+    this.id = id
+  }
+  
+  protected setVideoData (draft: VideoDraft) {
+    this.title = draft.title
+    this.options = draft.options
   }
 }
 
 export class Video extends VideoDraft {
-  id = ''
-  videoContext: AsyncLocalStorage<unknown>
+  ytId = ''
 
-  constructor (id: string, videoData?: VideoData) {
-    if (!id) {
+  constructor (ytId: string, draft: VideoDraft) {
+    if (!ytId) {
       throw new Error('Falta especificar el id del video')
     }
-    
-    super()
 
-    this.id = id
-    this.videoContext = videoContext
-    this.setVideoData(videoData ?? DEFAULT_VIDEO_DATA)
+    if (!draft) {
+      throw new Error('Falta especificar el borrador del video')
+    }
+
+    if (!draft.id) {
+      throw new Error('Falta el id del borrador')
+    }
+  
+    super(draft.id)
+
+    this.ytId = ytId
+    this.setVideoData(draft)
   }
 }
 
-export function addNewVideo (id: string, videoData?: VideoData): Video {
-  if (!id) {
-    throw new Error('Falta el id del video')
+export function addNewVideo (ytId: string, draft?: VideoDraft): Video {
+  if (!ytId) {
+    throw new Error('Falta especificar el id del video')
   }
 
-  if (process.videos.some((video) => video.id === id)) {
+  if (!draft) {
+    throw new Error('Falta especificar el borrador del video')
+  }
+
+  if (!draft.id) {
+    throw new Error('Falta el id del borrador')
+  }
+
+  if (process.videos.some((video) => video.id === ytId)) {
     throw new Error('El video ya está en la lista')
   }
 
-  const newVideo = new Video(id, videoData)
+  const newVideo = new Video(ytId, draft)
 
   process.videos.push(newVideo)
   
@@ -84,7 +96,7 @@ export function getVideoDataById (id: string) {
   const video = process.videos.find((video) => video.id === id)
 
   if (!video) {
-    throw new Error(`No existe un video con el id ${id}`)
+    throw new Error(`No existe un video con el id: ${id}`)
   }
 
   return video

@@ -13,11 +13,6 @@ export interface ProcessParams {
   useDefaultVideo: boolean
 }
 
-export interface VideoData {
-	title: string,
-	options: VideoOptions
-}
-
 export interface VideoOptions {
 	askForResolutions: boolean
 	downloadVideo: boolean
