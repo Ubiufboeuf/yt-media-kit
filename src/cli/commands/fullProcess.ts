@@ -221,7 +221,7 @@ export async function fullProcess () {
       return
     }
 
-    video.title = validation.partialVideo.title
+      video.title = validation.title
     
     await saveVideoInListOfSuggestions(video.id, video.title)
   }

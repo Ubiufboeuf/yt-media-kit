@@ -80,8 +80,6 @@ export interface Modes {
 export interface Validation {
 	success: boolean
 	error?: string
-	partialVideo: {
-		id: string,
+	id: string
 		title: string
 	}
-}

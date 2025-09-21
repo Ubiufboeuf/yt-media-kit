@@ -37,9 +37,7 @@ export async function validateVideoId (video: string | URL): Promise<Validation>
 
   return {
     success,
-    partialVideo: {
       id,
       title
     }
-  }
 }
