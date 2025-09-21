@@ -121,7 +121,7 @@ export function setProcessParam (param: SearchProcessParams, value: boolean) {
   }
 }
 
-export function isValidProcessParamKey  (key: string): key is keyof typeof process.params {
+export function isValidProcessParamKey (key: string): key is keyof typeof process.params {
   return key in process.params
 }
 
