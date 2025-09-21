@@ -2,6 +2,8 @@ import type { Process, SearchProcessParams, Video, VideoData } from 'src/core/ty
 import type { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/lib/constants'
 import { argv } from 'node:process'
+import { videoContext } from './context'
+import type { AsyncLocalStorage } from 'node:async_hooks'
 
 const process: Process = {
   videos: [],
@@ -47,6 +49,7 @@ export class VideoDraft {
 
 export class Video extends VideoDraft {
   id = ''
+  videoContext: AsyncLocalStorage<unknown>
 
   constructor (id: string, videoData?: VideoData) {
     if (!id) {
@@ -56,6 +59,7 @@ export class Video extends VideoDraft {
     super()
 
     this.id = id
+    this.videoContext = videoContext
     this.setVideoData(videoData ?? DEFAULT_VIDEO_DATA)
   }
 }

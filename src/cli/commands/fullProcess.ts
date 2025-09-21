@@ -13,10 +13,12 @@ import  { addNewVideo, getProcessParam, type Video, VideoDraft } from 'src/core/
 import { validateVideoId } from 'src/utils/validations'
 import { saveVideoInListOfSuggestions } from 'src/utils/saveVideoInList'
 import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
+import { videoContext } from 'src/core/context'
 
 const useDefaultVideo = getProcessParam('useDefaultVideo')
 
 export async function fullProcess () {
+  videoContext.run(crypto.randomUUID(), async () => {
   /** = Preguntas =
    * 
    * 1. [x] Modo del programa: Completo
@@ -279,4 +281,5 @@ export async function fullProcess () {
   if (video.options.getThumbnails) {
     //
   }
+  })
 }
