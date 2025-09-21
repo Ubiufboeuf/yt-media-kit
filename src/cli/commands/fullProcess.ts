@@ -210,7 +210,7 @@ export async function fullProcess () {
   if (!getProcessParam('skipValidation')) {
     let validation: Validation
     try {
-      validation = await validateVideoId(video.id)
+        validation = await validateVideoId(video.ytId, video.options.downloadVideo)
     } catch (err) {
       errorHandler(err, null, false, true)
       return
