@@ -3,7 +3,7 @@ import { Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { spawnAsync } from 'src/utils/spawnAsync'
 
-export async function muxVideoAndAudio (videoId: string) {
+export async function muxVideoAndAudio (ytId: string) {
   let videosConAudio: string[] = []
   try {
     videosConAudio = await readdir(Rutas.videos_con_audio)
@@ -11,7 +11,7 @@ export async function muxVideoAndAudio (videoId: string) {
     errorHandler(err, 'Error leyeno la carpeta de videos con audio')
   }
 
-  const videoConAudio = videosConAudio.find((file) => file.includes(videoId))
+  const videoConAudio = videosConAudio.find((file) => file.includes(ytId))
 
   if (videoConAudio) return
   
@@ -22,7 +22,7 @@ export async function muxVideoAndAudio (videoId: string) {
     errorHandler(err, 'Error leyendo la carpeta de videos descargados')
   }
 
-  const video = videos.find((file) => file.includes(videoId))
+  const video = videos.find((file) => file.includes(ytId))
 
   let audios: string[] = []
   try {
@@ -31,8 +31,8 @@ export async function muxVideoAndAudio (videoId: string) {
     errorHandler(err, 'Error leyendo la carpeta de audios descargados')
   }
 
-  const audio = audios.find((file) => file.includes(videoId))
-  const ffmpegParams = ['-i', `${Rutas.videos_descargados}/${video}`, '-i', `${Rutas.audios_descargados}/${audio}`, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'libopus', '-strict', 'experimental', '-shortest', `${Rutas.videos_con_audio}/${videoId}.mp4`]
+  const audio = audios.find((file) => file.includes(ytId))
+  const ffmpegParams = ['-i', `${Rutas.videos_descargados}/${video}`, '-i', `${Rutas.audios_descargados}/${audio}`, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'libopus', '-strict', 'experimental', '-shortest', `${Rutas.videos_con_audio}/${ytId}.mp4`]
 
   try {
     await spawnAsync('ffmpeg', ffmpegParams)
@@ -41,7 +41,7 @@ export async function muxVideoAndAudio (videoId: string) {
   }
 }
 
-export async function demuxVideoAndAudio (videoId: string) {
+export async function demuxVideoAndAudio (ytId: string) {
   let videos: string[] = []
   try {
     videos = await readdir(Rutas.videos_con_audio)
@@ -49,6 +49,6 @@ export async function demuxVideoAndAudio (videoId: string) {
     errorHandler(err, 'Error leyendo la carpeta de videos descargados')
   }
 
-  const videoConAudio = videos.find((file) => file.includes(videoId))
+  const videoConAudio = videos.find((file) => file.includes(ytId))
   // const ffmpegParams = ['-i', videoConAudio]
 }
