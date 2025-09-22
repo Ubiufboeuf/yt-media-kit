@@ -25,8 +25,8 @@ const processMode = await prompts({
   name: 'option',
   choices: [
     { title: 'Iterar Lista', value: 'iterateList' },
-    { title: 'Completo', value: 'fullProcess' },
-    { title: 'Actualizar lista de sugeridos', value: 'updateSuggestList' },
+    { title: 'Proceso Completo (1 video)', value: 'fullProcess' },
+    { title: 'Actualizar Lista de Sugeridos', value: 'updateSuggestList' },
     { title: 'Limpiar Todo', value: 'clearAll' }
   ]
 })
