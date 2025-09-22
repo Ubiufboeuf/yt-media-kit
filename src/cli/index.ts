@@ -6,6 +6,7 @@ import { fullProcess } from '../cli/commands/fullProcess'
 import { clearAll } from '../cli/commands/resetAndClean'
 import type { Modes } from '../env'
 import { loadProcessParams } from 'src/core/process'
+import { updateSuggestList } from './commands/updateSuggestList'
 console.clear()
 
 const params = loadProcessParams()
@@ -25,6 +26,7 @@ const processMode = await prompts({
   choices: [
     { title: 'Iterar Lista', value: 'iterateList' },
     { title: 'Completo', value: 'fullProcess' },
+    { title: 'Actualizar lista de sugeridos', value: 'updateSuggestList' },
     { title: 'Limpiar Todo', value: 'clearAll' }
   ]
 })
@@ -32,6 +34,7 @@ const processMode = await prompts({
 // Funciones para ejecutar los modos
 const modes: Modes = {
   fullProcess,
+  updateSuggestList,
   clearAll
 }
 
