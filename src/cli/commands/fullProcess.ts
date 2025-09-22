@@ -264,11 +264,11 @@ export async function fullProcess () {
     // 6.2.b Sincronizar audio+video (mux/demux)
 
     if (video.options.syncVideoAndAudio) { 
-      const muxVideoAndAudioPromise = muxVideoAndAudio(video.ytId)
-      await oraPromise(muxVideoAndAudioPromise, { text: 'Mezclando audio con video', successText: `Audio y video mezclados en ${Rutas.videos_con_audio}/${video.ytId}.mp4`, failText: 'No se pudo mezclar el audio con el video' })
+      const muxVideoAndAudioPromise = muxVideoAndAudio(video.ytId, video)
+      await oraPromise(muxVideoAndAudioPromise, { text: 'Mezclando audio con video', successText: 'Audio y video mezclados correctamente', failText: 'No se pudo mezclar el audio con el video' })
       
       const demuxVideoAndAudioPromise = demuxVideoAndAudio(video.ytId)
-      await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: `Audio y video separados en ${Rutas.videos}/${video.ytId}.mp4 y ${Rutas.audios}/${video.ytId}.opus`, failText: 'No se pudieron separar el audio y el video' })
+      await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: 'Audio y video separados correctamente', failText: 'No se pudieron separar el audio y el video' })
     }
 
     // 6.2.c Crear resoluciones extra
