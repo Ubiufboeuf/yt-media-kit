@@ -22,13 +22,6 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     } catch (err) {
       errorHandler(err, 'Error descargando el video', false)
     }
-
-    const videos = readdirSync(Rutas.videos_descargados)
-    if (videos.includes(`${videoId}.mp4`)) {
-      return
-    }
-    return
-
   } else if (format === 'audio' && maxResToDownload === 'audio') {
     let audioId = ''
     try {
@@ -57,10 +50,6 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
       if (audios.includes(`${videoId}.old.opus`)) {
         unlinkSync(`${Rutas.audios_descargados}/${videoId}.old.opus`)
       }
-      return
     }
-    return
   }
-
-  return
 }
