@@ -14,7 +14,7 @@ export async function muxVideoAndAudio (ytId: string, video: Video) {
   try {
     videosConAudio = await readdir(Rutas.videos_con_audio)
   } catch (err) {
-    errorHandler(err, 'Error leyeno la carpeta de videos con audio')
+    errorHandler(err, 'Error leyendo la carpeta de videos con audio')
   }
 
   const videoConAudio = videosConAudio.find((file) => file.includes(ytId))
