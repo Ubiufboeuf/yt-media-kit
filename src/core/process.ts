@@ -38,11 +38,14 @@ const DEFAULT_RESOLUTIONS: Resolution[] = [
   }
 ]
 
+const MAX_RESOLUTION_TO_DOWNLOAD = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
+
 export class VideoDraft {
   id = ''
   title = 'unknown_title'
   options = DEFAULT_VIDEO_OPTIONS
   resolutions = DEFAULT_RESOLUTIONS
+  maxResolutionToDownload = MAX_RESOLUTION_TO_DOWNLOAD
 
   constructor (id: string) {
     this.id = id

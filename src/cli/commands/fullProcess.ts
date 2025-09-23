@@ -250,6 +250,8 @@ export async function fullProcess () {
         return
       }
 
+      video.maxResolutionToDownload = maxResolutionToDownload
+
       const downloadVideosPromise = descargarVideo(video.ytId, maxResolutionToDownload, video.options.forceDownloadVideo)
       await oraPromise(downloadVideosPromise, { text: 'Descargando video', successText: 'Video descargado', failText: 'No se pudo descargar el video' })
 
