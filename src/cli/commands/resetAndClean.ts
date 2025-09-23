@@ -12,10 +12,10 @@ export async function clearAll () {
     message: `\
 ¿Seguro que quieres borrar TODO el contenido de TODAS las carpetas de recursos?
   ¡Esta acción es irreversible y solo pensada para desarrollo!
-  (Si quieres hacer esto debes escribir: Estoy seguro, borra TODO)\n`,
+  (Si quieres hacer esto debes escribir: ${FRASE_DE_SEGURIDAD})\n`,
     type: 'text',
     name: 'input',
-    validate: (input) => input === FRASE_DE_SEGURIDAD ? true : 'Debes escribir exáctamente: Estoy seguro, borra TODO'
+    validate: (input) => input === FRASE_DE_SEGURIDAD ? true : `Debes escribir exáctamente: ${FRASE_DE_SEGURIDAD}`
   })
 
   if (preguntaPorSeguridad.input === FRASE_DE_SEGURIDAD) {
