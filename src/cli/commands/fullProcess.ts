@@ -269,7 +269,7 @@ export async function fullProcess () {
       const muxVideoAndAudioPromise = muxVideoAndAudio(video.ytId, video)
       await oraPromise(muxVideoAndAudioPromise, { text: 'Mezclando audio con video', successText: 'Audio y video mezclados correctamente', failText: 'No se pudo mezclar el audio con el video' })
       
-      const demuxVideoAndAudioPromise = demuxVideoAndAudio(video.ytId)
+      const demuxVideoAndAudioPromise = demuxVideoAndAudio(video.ytId, video)
       await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: 'Audio y video separados correctamente', failText: 'No se pudieron separar el audio y el video' })
     }
 
