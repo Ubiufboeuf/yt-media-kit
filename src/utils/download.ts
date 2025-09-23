@@ -46,10 +46,8 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     }
 
     const audios = readdirSync(Rutas.audios_descargados)
-    if (audios.includes(`${videoId}.opus`)) {
-      if (audios.includes(`${videoId}.old.opus`)) {
-        unlinkSync(`${Rutas.audios_descargados}/${videoId}.old.opus`)
-      }
+    if (audios.includes(`${videoId}.opus`) && audios.includes(`${videoId}.old.opus`)) {
+      unlinkSync(`${Rutas.audios_descargados}/${videoId}.old.opus`)
     }
   }
 }
