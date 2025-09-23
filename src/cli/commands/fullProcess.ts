@@ -9,11 +9,12 @@ import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/
 import { response, Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { getVideoIdFromUrl } from 'src/utils/readUrl'
-import  { addNewVideo, getProcessParam, isValidResolution, type Video, VideoDraft } from 'src/core/process'
+import  { addNewVideo, getProcessParam } from 'src/core/process'
 import { validateVideoId } from 'src/utils/validations'
 import { saveVideoInListOfSuggestions } from 'src/utils/saveVideoInList'
 import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
 import { videoContext } from 'src/core/context'
+import { isValidResolution, VideoDraft, type Video } from 'src/core/video'
 
 const useDefaultVideo = getProcessParam('useDefaultVideo')
 
