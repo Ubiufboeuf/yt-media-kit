@@ -96,7 +96,7 @@ export const FONTFACES = {
 
 export const YT_DLP = 'yt-dlp'
 export const KWD = '/home/mango/Dev/yt-media-kit' // KWD: Kit-Working-Directory
-export const PRD = '/home/mango/Dev/nexora' // PD:  Production-Directory
+export const PRD = '/home/mango/Dev/nexora' // PRD:  PRoduction-Directory
 export const MIN_RES = '32p'
 
 export const Rutas = {
