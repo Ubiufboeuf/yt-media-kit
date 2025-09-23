@@ -4,11 +4,11 @@ import { basename, extname } from 'node:path'
 import type { Video } from 'src/core/process'
 import { Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
-import { spawnAsync } from 'src/utils/spawnAsync'
-import { getVideoSize } from 'src/utils/videoMetadata'
+import { mux } from 'src/utils/mux'
 
 export async function muxVideoAndAudio (ytId: string, video: Video) {
   const { forceSync } = video.options
+  const { maxResolutionToDownload } = video
   
   let videosConAudio: string[] = []
   try {
@@ -19,62 +19,39 @@ export async function muxVideoAndAudio (ytId: string, video: Video) {
 
   const videoConAudio = videosConAudio.find((file) => file.includes(ytId))
 
-  if (forceSync && videoConAudio) {
-    if (
-      videosConAudio.some((file) => file.includes(`${ytId}.old`)) &&
-      videosConAudio.some((file) => file.includes(`${ytId}.`) && !file.includes('.old'))
-    ) {
-      // Existe un .old y otro no .old del mismo video
-      const oldVideoFile = videosConAudio.find((file) => file.includes(`${ytId}.old`))
-      await unlink(`${Rutas.videos_con_audio}/${oldVideoFile}`)
-    }
-    
-    const baseName = basename(videoConAudio, extname(videoConAudio))
-    await rename(`${Rutas.videos_con_audio}/${videoConAudio}`, `${Rutas.videos_con_audio}/${baseName}.old.mp4`)
-  } else if (videoConAudio) {
-    console.log(chalk.gray('(Ya existe el video con audio, omitiendo)'))
+  if (!videoConAudio) {
+    await mux(ytId)
     return
   }
 
-  let videos: string[] = []
-  try {
-    videos = await readdir(Rutas.videos_descargados)
-  } catch (err) {
-    errorHandler(err, 'Error leyendo la carpeta de videos descargados')
-  }
+  const match = videoConAudio.match(/\[(.+)\]/)
+  const resolucionGuardada = match?.[1]
 
-  const videoDescargado = videos.find((file) => file.includes(ytId))
+  if (
+    (resolucionGuardada !== maxResolutionToDownload.download) ||
+    (resolucionGuardada === maxResolutionToDownload.download && forceSync)
+  ) {
+    // Si la resolución guardada es diferente a la que quiere el usuario, o
+    // si son iguales pero fuerza, entonces:
 
-  let audios: string[] = []
-  try {
-    audios = await readdir(Rutas.audios_descargados)
-  } catch (err) {
-    errorHandler(err, 'Error leyendo la carpeta de audios descargados')
-  }
+    const ext = extname(videoConAudio)
+    const slug = basename(videoConAudio, ext)
 
-  let resolution: number = 0
-  try {
-    const size = await getVideoSize(`${Rutas.videos_descargados}/${videoDescargado}`)
-    resolution = size?.height ?? 0
-  } catch (err) {
-    errorHandler(err, 'Error consiguiendo la resolución del video descargado')
-  }
+    // 1. Renombra el video viejo
+    await rename(`${Rutas.videos_con_audio}/${videoConAudio}`, `${Rutas.videos_con_audio}/${slug}.old${ext}`)
+    
+    // 2. Consigue el nuevo video
+    await mux(ytId)
 
-  const audioDescargado = audios.find((file) => file.includes(ytId))
-  const ffmpegParams = ['-i', `${Rutas.videos_descargados}/${videoDescargado}`, '-i', `${Rutas.audios_descargados}/${audioDescargado}`, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'libopus', '-strict', 'experimental', '-shortest', `${Rutas.videos_con_audio}/[${resolution}p]-${ytId}.mp4`]
-
-  try {
-    await spawnAsync('ffmpeg', ffmpegParams)
-  } catch (err) {
-    errorHandler(err, 'Error uniendo video con audio')
-  }
-
-  videosConAudio = await readdir(Rutas.videos_con_audio)
-  const videoSlug = `[${resolution}p]-${ytId}`
-  if (videosConAudio.includes(`${videoSlug}.mp4`)) {
-    if (videosConAudio.includes(`${videoSlug}.old.mp4`)) {
-      await unlink(`${Rutas.videos_con_audio}/${`${videoSlug}.old.mp4`}`)
+    // 3. Borra el viejo si se consiguió el nuevo
+    videosConAudio = await readdir(Rutas.videos_con_audio)
+    if (videosConAudio.some((file) => file.includes(ytId) && !file.includes('.old'))) {
+      await unlink(`${Rutas.videos_con_audio}/${slug}.old${ext}`)
     }
+  }
+
+  if (resolucionGuardada === maxResolutionToDownload.download && !forceSync) {
+    console.log(chalk.gray('\n(Ya existe el video, omitiendo)'))
   }
 }
 
