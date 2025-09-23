@@ -128,7 +128,9 @@ export const response = {
   forceDownloadVideo: 'forceDownloadVideo',
   forceDownloadAudio: 'forceDownloadAudio',
   syncVideoAndAudio: 'syncVideoAndAudio',
+  unsyncVideoAndAudio: 'unsyncVideoAndAudio',
   forceSync: 'forceSync',
+  forceUnsync: 'forceUnsync',
   createDashStream: 'createDashStream',
   getVideoData: 'getVideoData',
   getThumbnails: 'getThumbnails'

@@ -19,7 +19,9 @@ export interface VideoOptions {
 	forceDownloadVideo: boolean
 	forceDownloadAudio: boolean
 	syncVideoAndAudio: boolean
+	unsyncVideoAndAudio: boolean
 	forceSync: boolean
+	forceUnsync: boolean
 	createDashStream: boolean
 	getVideoData: boolean
 	getThumbnails: boolean

@@ -57,7 +57,7 @@ export async function muxVideoAndAudio (ytId: string, video: Video) {
 }
 
 export async function demuxVideoAndAudio (ytId: string, video: Video) {
-  const { forceSync } = video.options
+  const { forceUnsync } = video.options
 
   let videosConAudio: string[] = []
   try {
@@ -90,16 +90,16 @@ export async function demuxVideoAndAudio (ytId: string, video: Video) {
   const videoSeparado = videosSeparados.find((file) => file.includes(ytId))
   const audioSeparado = audiosSeparados.find((file) => file.includes(ytId))
 
-  if (videoSeparado && audioSeparado && !forceSync) {
+  if (videoSeparado && audioSeparado && !forceUnsync) {
     console.log(chalk.gray('\n(Ya existen el video y el audio separados, omitiendo)'))
     return
   }
 
-  if (videoSeparado && !forceSync) {
+  if (videoSeparado && !forceUnsync) {
     console.log(chalk.gray('\n(Ya existe el video separado, omitiendo)'))
   }
 
-  if (audioSeparado && !forceSync) {
+  if (audioSeparado && !forceUnsync) {
     console.log(chalk.gray('\n(Ya existe el audio separado, omitiendo)'))
   }
   
@@ -111,7 +111,7 @@ export async function demuxVideoAndAudio (ytId: string, video: Video) {
     await demuxAudio(ytId)
   }
 
-  if (videoSeparado && forceSync) {
+  if (videoSeparado && forceUnsync) {
     const ext = extname(videoSeparado)
     const slug = basename(videoSeparado, ext)
     
@@ -128,7 +128,7 @@ export async function demuxVideoAndAudio (ytId: string, video: Video) {
     }
   }
 
-  if (audioSeparado && forceSync) {
+  if (audioSeparado && forceUnsync) {
     const ext = extname(audioSeparado)
     const slug = basename(audioSeparado, ext)
     

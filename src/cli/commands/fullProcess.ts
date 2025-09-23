@@ -101,7 +101,7 @@ export async function fullProcess () {
         },
         {
           title: 'Sincronizar video con audio',
-          description: `Unir y separar video con audio antes de crear las resoluciones. Guarda el video con audio en ${Rutas.videos_con_audio}/`,
+          description: 'Unir video con audio antes de crear las resoluciones',
           value: response.syncVideoAndAudio,
           selected: true
         },
@@ -109,6 +109,18 @@ export async function fullProcess () {
           title: 'Sobreescribir video sincronizado',
           description: 'Fuerza la mezcla del video con el audio, incluso si ya existe. Depende de la opción anterior marcada',
           value: response.forceSync,
+          selected: false
+        },
+        {
+          title: 'Separar video y audio',
+          description: 'Separa el video y el audio antes de crear las resoluciones',
+          value: response.unsyncVideoAndAudio,
+          selected: true
+        },
+        {
+          title: 'Sobreescribir video y audio separados',
+          description: 'Fuerza la separación del video y del audio, incluso si ya existen. Depende de la opción anterior marcada',
+          value: response.forceUnsync,
           selected: false
         },
         {
@@ -269,7 +281,9 @@ export async function fullProcess () {
     if (video.options.syncVideoAndAudio) { 
       const muxVideoAndAudioPromise = muxVideoAndAudio(video.ytId, video)
       await oraPromise(muxVideoAndAudioPromise, { text: 'Mezclando audio con video', successText: 'Audio y video mezclados correctamente', failText: 'No se pudo mezclar el audio con el video' })
-      
+    }
+
+    if (video.options.unsyncVideoAndAudio) {
       const demuxVideoAndAudioPromise = demuxVideoAndAudio(video.ytId, video)
       await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: 'Audio y video separados correctamente', failText: 'No se pudieron separar el audio y el video' })
     }
