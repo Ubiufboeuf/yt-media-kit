@@ -86,6 +86,7 @@ export async function demuxVideoAndAudio (ytId: string) {
     errorHandler(err, 'Error leyendo la carpeta de videos descargados')
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const videoConAudio = videos.find((file) => file.includes(ytId))
   // const ffmpegParams = ['-i', videoConAudio]
 }
