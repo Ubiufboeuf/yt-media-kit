@@ -103,7 +103,7 @@ export async function getResolutionId (videoId: string, download: string) {
   return best_id.id
 }
 
-export async function descargarVideo (videoId: string, resolutions: Resolution[], maxResToDownload: Resolution, forceDownload: boolean = false) {
+export async function descargarVideo (videoId: string, maxResToDownload: Resolution, forceDownload: boolean = false) {
   // console.log('descargar video', videoId, resolutions, maxResToDownload, forceDownload)
   let videosDescargados: string[] = []
   try {
