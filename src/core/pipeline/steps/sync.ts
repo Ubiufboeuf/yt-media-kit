@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { readdir, rename, unlink } from 'node:fs/promises'
 import { basename, extname } from 'node:path'
-import type { Video } from 'src/core/process'
+import type { Video } from 'src/core/video'
 import { Rutas } from 'src/lib/constants'
 import { demuxAudio, demuxVideo } from 'src/utils/demux'
 import { errorHandler } from 'src/utils/errorHandler'

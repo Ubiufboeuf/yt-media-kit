@@ -1,4 +1,4 @@
-import type { Video } from './process'
+import type { Video } from './video' 
 
 export interface Process {
   videos: Video[]
