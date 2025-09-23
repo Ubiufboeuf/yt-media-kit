@@ -1,5 +1,5 @@
-import { Rutas, Rutas_para_borrar } from '../../lib/constants'
-import { unlink, rm, readdir } from 'node:fs/promises'
+import { Rutas_para_borrar } from '../../lib/constants'
+import { rm, readdir } from 'node:fs/promises'
 import { exit } from 'node:process'
 import { oraPromise } from 'ora'
 import prompts from 'prompts'
@@ -39,12 +39,7 @@ const clearAllPromise = async () => {
     }
 
     for (const archivo of contenido) {
-      if (ruta === Rutas.completos || ruta === Rutas.assets) {
-        // En linux todo es un archivo :v
-        rm(`${ruta}/${archivo}`, { recursive: true, force: true })
-        continue 
-      }
-      unlink(`${ruta}/${archivo}`)
+      rm(`${ruta}/${archivo}`, { recursive: true, force: true })
     }
   }
 }
