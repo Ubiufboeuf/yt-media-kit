@@ -9,7 +9,7 @@
   "scripts": {
     "cli": "bun src/cli/index.ts",
     "start": "bun cli",
-    "dev": "bun --watch src/cli/index.ts dev",
+    "dev": "bun --watch src/cli/index.ts --dev",
     "build:cli": "bun build --compile --outfile=bin/yt-media-kit src/cli/index.ts"
   },
   "keywords": [],
