@@ -11,7 +11,7 @@ const process: Process = {
     help: false,
     isDevMode: false,
     skipValidation: false,
-    useDefaultVideo: false
+    useDefaultVideoId: false
   }
 }
 
@@ -38,12 +38,12 @@ export function setProcessParam (param: SearchProcessParams, value: boolean) {
 export function loadProcessParams (): ProcessParams {    
   const help = argv.join(' ').includes(Arguments.help.toLowerCase())
   const skipValidation = argv.some((a) => a.toLowerCase() === Arguments.skipValidation.toLowerCase())
-  const useDefaultVideo = argv.some((a) => a.toLowerCase() === Arguments.useDefaultVideo.toLowerCase())
+  const useDefaultVideoId = argv.some((a) => a.toLowerCase() === Arguments.useDefaultVideoId.toLowerCase())
   const isDevMode = argv.some((a) => a.toLowerCase() === Arguments.dev.toLowerCase())
 
   const processParams = {
     skipValidation,
-    useDefaultVideo,
+    useDefaultVideoId,
     isDevMode,
     ...(isDevMode ? devParams : {}),
     help

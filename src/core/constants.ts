@@ -28,7 +28,7 @@ export const devParams: ProcessParams = {
   help: false,
   isDevMode: true,
   skipValidation: true,
-  useDefaultVideo: true
+  useDefaultVideoId: true
 }
 
 export const Arguments = {

@@ -5,13 +5,13 @@ export interface Process {
   params: ProcessParams
 }
 
-export type SearchProcessParams = 'help' | 'isDevMode' | 'skipValidation' | 'useDefaultVideo'
+export type SearchProcessParams = 'help' | 'isDevMode' | 'skipValidation' | 'useDefaultVideoId'
 
 export interface ProcessParams {
 	help: boolean
   isDevMode: boolean
   skipValidation: boolean
-  useDefaultVideo: boolean
+  useDefaultVideoId: boolean
 }
 
 export interface VideoOptions {
