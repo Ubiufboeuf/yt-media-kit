@@ -25,7 +25,6 @@ export const DEFAULT_RESOLUTIONS: Resolution[] = [
 export const MAX_RESOLUTION_TO_DOWNLOAD = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
 
 export const devParams: ProcessParams = {
-  help: false,
   isDevMode: true,
   skipValidation: true,
   useDefaultVideoId: true
