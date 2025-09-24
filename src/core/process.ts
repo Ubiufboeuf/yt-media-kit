@@ -19,12 +19,6 @@ const process: Process = {
 // ===  Funciones del proceso  ===
 // === === === === === === === ===
 
-export function setProcessParam (param: SearchProcessParams, value: boolean) {
-  if (Object.keys(process.params).includes(param)) {
-    process.params[param] = value
-  }
-}
-
 export function isValidProcessParamKey (key: string): key is keyof typeof process.params {
   return key in process.params
 }
@@ -32,6 +26,12 @@ export function isValidProcessParamKey (key: string): key is keyof typeof proces
 export function getProcessParam (param: SearchProcessParams) {
   if (Object.keys(process.params).includes(param)) {
     return process.params[param]
+  }
+}
+
+export function setProcessParam (param: SearchProcessParams, value: boolean) {
+  if (Object.keys(process.params).includes(param)) {
+    process.params[param] = value
   }
 }
 
