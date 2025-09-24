@@ -137,6 +137,7 @@ export const response = {
 }
 
 export const Arguments = {
+	help: '--help',
 	dev: 'dev',
 	skipValidation: 'skipValidation',
 	useDefaultVideo: 'useDefaultVideo'

@@ -8,6 +8,7 @@ import { Video, type VideoDraft } from './video'
 const process: Process = {
   videos: [],
   params: {
+    help: false,
     isDevMode: false,
     skipValidation: false,
     useDefaultVideo: false
@@ -34,7 +35,8 @@ export function getProcessParam (param: SearchProcessParams) {
   }
 }
 
-export function loadProcessParams (): ProcessParams {  
+export function loadProcessParams (): ProcessParams {    
+  const help = argv.join(' ').includes(Arguments.help.toLowerCase())
   const skipValidation = argv.some((a) => a.toLowerCase() === Arguments.skipValidation.toLowerCase())
   const useDefaultVideo = argv.some((a) => a.toLowerCase() === Arguments.useDefaultVideo.toLowerCase())
   const isDevMode = argv.some((a) => a.toLowerCase() === Arguments.dev.toLowerCase())
@@ -43,7 +45,8 @@ export function loadProcessParams (): ProcessParams {
     skipValidation,
     useDefaultVideo,
     isDevMode,
-    ...(isDevMode ? devParams : {})
+    ...(isDevMode ? devParams : {}),
+    help
   }
 
   for (const [key, param] of Object.entries(processParams)) {
