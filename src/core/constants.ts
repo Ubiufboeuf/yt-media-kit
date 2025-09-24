@@ -30,3 +30,10 @@ export const devParams: ProcessParams = {
   skipValidation: true,
   useDefaultVideo: true
 }
+
+export const Arguments = {
+	help: '--help',
+	dev: 'dev',
+	skipValidation: 'skipValidation',
+	useDefaultVideo: 'useDefaultVideo'
+}

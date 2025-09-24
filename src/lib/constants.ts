@@ -135,10 +135,3 @@ export const response = {
   getVideoData: 'getVideoData',
   getThumbnails: 'getThumbnails'
 }
-
-export const Arguments = {
-	help: '--help',
-	dev: 'dev',
-	skipValidation: 'skipValidation',
-	useDefaultVideo: 'useDefaultVideo'
-}
