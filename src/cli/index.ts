@@ -8,7 +8,6 @@ import type { Modes } from '../env'
 import { loadProcessParams } from 'src/core/process'
 import { updateSuggestList } from './commands/updateSuggestList'
 import { showHelper } from 'src/core/helper'
-console.clear()
 
 const params = loadProcessParams()
 
@@ -17,6 +16,8 @@ async function main () {
     showHelper()
     return
   }
+
+  console.clear()
 
   say('YT-Media-Kit', {
     colors: ['red', 'magenta']
