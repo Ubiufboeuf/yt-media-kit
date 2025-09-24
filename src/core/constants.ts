@@ -33,7 +33,7 @@ export const devParams: ProcessParams = {
 
 export const Arguments = {
 	help: '--help',
-	dev: 'dev',
-	skipValidation: 'skipValidation',
-	useDefaultVideo: 'useDefaultVideo'
+	dev: '--dev',
+	skipValidation: '--skip-validation',
+	useDefaultVideoId: '--use-default-video-id'
 }
