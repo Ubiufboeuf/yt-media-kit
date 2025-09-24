@@ -2,7 +2,7 @@ import type { Process, SearchProcessParams } from 'src/core/types'
 import type { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/core/constants'
 import { argv } from 'node:process'
-import {devParams } from './constants'
+import { devParams } from './constants'
 import { Video, type VideoDraft } from './video'
 
 const process: Process = {
