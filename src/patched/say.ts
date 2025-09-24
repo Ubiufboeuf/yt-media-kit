@@ -1,4 +1,4 @@
-import { say as _say } from 'cfonts'
+import { say as _say } from 'cfonts-for-bun'
 import type { CFontsSettings, Colors } from '../env'
 import { COLORS } from '../lib/constants'
 
