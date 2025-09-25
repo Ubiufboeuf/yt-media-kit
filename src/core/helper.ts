@@ -2,7 +2,7 @@ import { PROGRAM_VERSION } from 'src/lib/constants'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
-export async function showHelper () {
+export function showHelp () {
   const terminalWidth = Math.max(yargs(hideBin(process.argv)).terminalWidth() - 24, 48)
   
   const argv = yargs(hideBin(process.argv))
