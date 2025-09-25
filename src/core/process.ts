@@ -36,10 +36,12 @@ export function setProcessParam (param: SearchProcessParams, value: boolean) {
 }
 
 export function loadProcessParams (): ProcessParams {    
-  const help = argv.join(' ').includes(Arguments.help.toLowerCase())
-  const skipValidation = argv.some((a) => a.toLowerCase() === Arguments.skipValidation.toLowerCase())
-  const useDefaultVideoId = argv.some((a) => a.toLowerCase() === Arguments.useDefaultVideoId.toLowerCase())
-  const isDevMode = argv.some((a) => a.toLowerCase() === Arguments.dev.toLowerCase())
+  const args = argv.join(' ')
+  
+  const help = args.includes(Arguments.help.toLowerCase())
+  const skipValidation = args.includes(Arguments.skipValidation.toLowerCase())
+  const useDefaultVideoId = args.includes(Arguments.useDefaultVideoId.toLowerCase())
+  const isDevMode = args.includes(Arguments.dev.toLowerCase())
 
   const processParams = {
     skipValidation,
