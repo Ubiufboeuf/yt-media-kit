@@ -7,13 +7,18 @@ import { clearAll } from '../cli/commands/resetAndClean'
 import type { Modes } from '../env'
 import { loadProcessParams } from 'src/core/process'
 import { updateSuggestList } from './commands/updateSuggestList'
-import { showHelper } from 'src/core/helper'
+import { showHelper, showVersion } from 'src/core/helper'
 
 const params = loadProcessParams()
 
 async function main () {
   if (params.help) {
     showHelper()
+    return
+  }
+
+  if (params.version) {
+    showVersion()
     return
   }
 

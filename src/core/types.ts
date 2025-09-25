@@ -9,6 +9,7 @@ export type SearchProcessParams = 'help' | 'isDevMode' | 'skipValidation' | 'use
 
 export interface ProcessParams {
 	help?: boolean
+	version?: boolean
   isDevMode?: boolean
   skipValidation?: boolean
   useDefaultVideoId?: boolean

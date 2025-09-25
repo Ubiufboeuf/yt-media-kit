@@ -1,3 +1,4 @@
+import { PROGRAM_VERSION } from 'src/lib/constants'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
@@ -19,4 +20,8 @@ export async function showHelper () {
     .parseSync()
 
   console.log(argv)
+}
+
+export function showVersion () {
+  console.log(PROGRAM_VERSION)
 }
