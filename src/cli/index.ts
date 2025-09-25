@@ -12,16 +12,6 @@ import { showHelp, showVersion } from 'src/core/helper'
 const params = loadProcessParams()
 
 async function main () {
-  if (params.help) {
-    showHelp()
-    return
-  }
-
-  if (params.version) {
-    showVersion()
-    return
-  }
-
   console.clear()
 
   say('YT-Media-Kit', {
@@ -60,4 +50,12 @@ async function main () {
 
 if (params.interactiveMode) {
   main()
+}
+
+if (params.help) {
+  showHelp()
+}
+
+if (params.version) {
+  showVersion()
 }
