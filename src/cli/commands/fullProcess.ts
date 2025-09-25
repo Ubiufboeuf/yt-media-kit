@@ -6,7 +6,7 @@ import type { VideoOptions } from '../../core/types'
 import { descargarAudio } from '../../core/pipeline/steps/downloadAudio'
 import list from '../../lib/list-of-videos-to-suggest.json' with { type: 'json' }
 import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/sync'
-import { response, Rutas } from 'src/lib/constants'
+import { response } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { getVideoIdFromUrl } from 'src/utils/readUrl'
 import  { addNewVideo, getProcessParam } from 'src/core/process'
