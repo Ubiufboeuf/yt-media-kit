@@ -16,7 +16,7 @@ import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
 import { videoContext } from 'src/core/context'
 import { isValidResolution, VideoDraft, type Video } from 'src/core/video'
 
-const useDefaultVideo = getProcessParam('useDefaultVideo')
+const useDefaultVideoId = getProcessParam('useDefaultVideoId')
 
 export async function fullProcess () {
   videoContext.run({ id: crypto.randomUUID() }, async () => {
@@ -192,7 +192,7 @@ export async function fullProcess () {
         message: 'ID o URL del video',
         type: 'text',
         name: 'value',
-        initial: useDefaultVideo ? 'c4mHDmvrn4M' : '',
+        initial: useDefaultVideoId ? 'c4mHDmvrn4M' : '',
         validate: (value) => {
           if (!value || !value.trim()) {
             return 'No puedes ingresar un texto vacío'
