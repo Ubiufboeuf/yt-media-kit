@@ -6,7 +6,7 @@ export function showHelp () {
   const terminalWidth = Math.max(yargs(hideBin(process.argv)).terminalWidth() - 24, 48)
   
   const argv = yargs(hideBin(process.argv))
-    .usage('Uso: yt-media-kit [options] [url]\nSi no se pasan parámetros se mostrará la CLI interactiva.')
+    .usage('Uso: yt-media-kit [options] [url]\n\nSi no se pasan parámetros se mostrará la CLI interactiva.')
     .option('dev', {
       describe: 'Ejecuta el programa en modo desarrollo. Esto omite cosas como la validación de los videos y activa otros parámetros forzadamente: --skip-validation y --use-default-video-id.'
     })
