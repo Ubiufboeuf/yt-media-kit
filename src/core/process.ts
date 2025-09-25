@@ -1,4 +1,4 @@
-import type { Process, SearchProcessParams } from 'src/core/types'
+import type { Process } from 'src/core/types'
 import type { ProcessParams } from 'src/core/types'
 import { Arguments } from 'src/core/constants'
 import { argv } from 'node:process'
@@ -24,13 +24,13 @@ export function isValidProcessParamKey (key: string): key is keyof typeof proces
   return key in process.params
 }
 
-export function getProcessParam (param: SearchProcessParams) {
+export function getProcessParam (param: keyof ProcessParams) {
   if (Object.keys(process.params).includes(param)) {
     return process.params[param]
   }
 }
 
-export function setProcessParam (param: SearchProcessParams, value: boolean) {
+export function setProcessParam (param: keyof ProcessParams, value: boolean) {
   if (Object.keys(process.params).includes(param)) {
     process.params[param] = value
   }
