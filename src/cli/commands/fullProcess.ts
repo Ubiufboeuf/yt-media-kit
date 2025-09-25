@@ -4,7 +4,7 @@ import { askForResolution, descargarVideo, getMaxResolutionToDownload } from '..
 import type { Resolution, Validation } from '../../env'
 import type { VideoOptions } from '../../core/types'
 import { descargarAudio } from '../../core/pipeline/steps/downloadAudio'
-import list from '../../lib/videos-to-suggest.json' with { type: 'json' }
+import list from '../../lib/list-of-videos-to-suggest.json' with { type: 'json' }
 import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/sync'
 import { response, Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
