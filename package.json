@@ -2,7 +2,7 @@
   "name": "yt-media-kit",
   "version": "2025.09.23",
   "description": "",
-  "main": "index.js",
+  "main": "src/cli/index.ts",
   "bin": {
     "yt-media-kit": "./bin/yt-media-kit"
   },
