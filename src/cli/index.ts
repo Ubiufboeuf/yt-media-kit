@@ -58,4 +58,6 @@ async function main () {
   mode()
 }
 
-main()
+if (params.interactiveMode) {
+  main()
+}

@@ -8,6 +8,7 @@ export interface Process {
 export interface ProcessParams {
 	help?: boolean
 	version?: boolean
+	interactiveMode: boolean
   isDevMode?: boolean
   skipValidation?: boolean
   useDefaultVideoId?: boolean

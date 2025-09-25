@@ -1,6 +1,6 @@
 import type { Process } from 'src/core/types'
 import type { ProcessParams } from 'src/core/types'
-import { Arguments } from 'src/core/constants'
+import { Arguments, listOfParamsToCancelInteractiveMode } from 'src/core/constants'
 import { argv } from 'node:process'
 import { devParams } from './constants'
 import { Video, type VideoDraft } from './video'
@@ -10,6 +10,7 @@ const process: Process = {
   params: {
     version: false,
     help: false,
+    interactiveMode: true,
     isDevMode: false,
     skipValidation: false,
     useDefaultVideoId: false
@@ -49,17 +50,31 @@ export function loadProcessParams (): ProcessParams {
     skipValidation,
     useDefaultVideoId,
     isDevMode,
+    interactiveMode: true,
     ...(isDevMode ? devParams : {}),
     version,
     help
   }
 
-  for (const [key, param] of Object.entries(processParams)) {
-    if (isValidProcessParamKey(key)) {
-      setProcessParam(key, param)
+  for (const [param, value] of Object.entries(processParams)) {
+    if (isValidProcessParamKey(param)) {
+      setProcessParam(param, value)
+      
+      if (listOfParamsToCancelInteractiveMode.includes(param) && value) {
+        processParams.interactiveMode = false
+
+        setProcessParam('interactiveMode', false)
+
+        for (const param in devParams) {
+          if (isValidProcessParamKey(param)) {
+            processParams[param] = false
+            setProcessParam(param, false)
+          }
+        }
+      }
     }
   }
-  
+
   return processParams
 }
 

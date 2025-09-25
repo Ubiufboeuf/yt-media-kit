@@ -25,6 +25,7 @@ export const DEFAULT_RESOLUTIONS: Resolution[] = [
 export const MAX_RESOLUTION_TO_DOWNLOAD = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
 
 export const devParams: ProcessParams = {
+  interactiveMode: true,
   isDevMode: true,
   skipValidation: true,
   useDefaultVideoId: true
@@ -37,3 +38,8 @@ export const Arguments = {
 	skipValidation: '--skip-validation',
 	useDefaultVideoId: '--use-default-video-id'
 }
+
+export const listOfParamsToCancelInteractiveMode: (Partial<keyof ProcessParams>)[] = [
+  'help',
+  'version'
+]
