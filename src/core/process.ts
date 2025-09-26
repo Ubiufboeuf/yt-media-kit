@@ -47,10 +47,10 @@ export function loadProcessParams (): ProcessParams {
   const isDevMode = args.includes(Arguments.dev.toLowerCase())
 
   const processParams = {
+    ...process.params,
     skipValidation,
     useDefaultVideoId,
     isDevMode,
-    interactiveMode: true,
     ...(isDevMode ? devParams : {}),
     version,
     help
