@@ -99,8 +99,6 @@ export async function download () {
   // - - - - - - - - - - - - - - - - - - - - - -
   // Preguntar resolución del video (si lo marcó)
 
-  console.log(videoDraft)
-  
   let resoluciones: Resolution[] = DEFAULT_RESOLUTIONS
 
   if (videoDraft.options.downloadVideo && videoDraft.options.askForResolutions) {
@@ -199,8 +197,6 @@ export async function download () {
 
     video.maxResolutionToDownload = maxResolutionToDownload
 
-    console.log(video)
-    
     const downloadVideosPromise = descargarVideo(video.ytId, maxResolutionToDownload, video.options.forceDownloadVideo)
     await oraPromise(downloadVideosPromise, { text: 'Descargando video', successText: 'Video descargado', failText: 'No se pudo descargar el video' })
 
