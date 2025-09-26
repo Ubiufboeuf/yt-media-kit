@@ -38,6 +38,7 @@ async function main () {
   const modes: Modes = {
     fullProcess,
     updateSuggestList,
+    download,
     clearAll
   }
 
