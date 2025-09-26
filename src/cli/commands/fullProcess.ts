@@ -15,6 +15,7 @@ import { saveVideoInListOfSuggestions } from 'src/utils/saveVideoInList'
 import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
 import { videoContext } from 'src/core/context'
 import { isValidResolution, VideoDraft, type Video } from 'src/core/video'
+import { MAX_RESOLUTION_TO_DOWNLOAD } from 'src/core/constants'
 
 const useDefaultVideoId = getProcessParam('useDefaultVideoId')
 
@@ -254,7 +255,7 @@ export async function fullProcess () {
   // 6.1.a Descargar video
 
   if (video.options.downloadVideo) {
-    let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
+    let maxResolutionToDownload: Resolution = MAX_RESOLUTION_TO_DOWNLOAD
     try {
       maxResolutionToDownload = await getMaxResolutionToDownload(video.resolutions)
     } catch {

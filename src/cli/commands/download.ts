@@ -1,7 +1,7 @@
 import { oraPromise } from 'ora'
 import list from '../../lib/list-of-videos-to-suggest.json' with { type: 'json' }
 import prompts from 'prompts'
-import { DEFAULT_RESOLUTIONS } from 'src/core/constants'
+import { DEFAULT_RESOLUTIONS, MAX_RESOLUTION_TO_DOWNLOAD } from 'src/core/constants'
 import { videoContext } from 'src/core/context'
 import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
 import { askForResolution, descargarVideo, getMaxResolutionToDownload } from 'src/core/pipeline/steps/downloadVideo'
@@ -179,7 +179,7 @@ export async function download () {
   // Descargar
 
   if (video.options.downloadVideo) {
-    let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
+    let maxResolutionToDownload: Resolution = MAX_RESOLUTION_TO_DOWNLOAD
     try {
       maxResolutionToDownload = await getMaxResolutionToDownload(video.resolutions)
     } catch {
