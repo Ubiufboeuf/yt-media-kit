@@ -9,6 +9,7 @@ import { loadProcessParams } from 'src/core/process'
 import { updateSuggestList } from './commands/updateSuggestList'
 import { showHelp, showVersion } from 'src/core/helper'
 import { videoContext } from 'src/core/context'
+import { download } from './commands/download'
 
 const params = loadProcessParams()
 
