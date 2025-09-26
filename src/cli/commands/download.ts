@@ -64,6 +64,16 @@ export async function download () {
         selected: true
       },
       {
+        title: 'Forzar descarga de audio',
+        value: response.forceDownloadAudio,
+        selected: false
+      },
+      {
+        title: 'Forzar descarga de video',
+        value: response.forceDownloadVideo,
+        selected: false
+      },
+      {
         title: 'Preguntar resoluciones para descargar',
         description: 'Si desmarcas esta opción se descargará en 360p',
         value: response.askForResolutions,
