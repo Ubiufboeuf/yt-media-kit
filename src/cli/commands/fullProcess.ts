@@ -178,7 +178,7 @@ export async function fullProcess () {
     message: 'Elige una opción',
     type: 'autocomplete',
     name: 'value',
-    initial: 'id',
+    initial: 'custom',
     choices: [
       { title: 'Escribir el ID o URL', value: 'custom', description: 'Si es la URL de una lista se conseguirá el ID del video que se esté reproduciendo' },
       // Pongo title e id al revés para que puedas buscar por id, más facil por ciertos carácteres de los títulos
