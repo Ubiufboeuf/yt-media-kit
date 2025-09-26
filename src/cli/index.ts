@@ -8,6 +8,7 @@ import type { Modes } from '../env'
 import { loadProcessParams } from 'src/core/process'
 import { updateSuggestList } from './commands/updateSuggestList'
 import { showHelp, showVersion } from 'src/core/helper'
+import { videoContext } from 'src/core/context'
 
 const params = loadProcessParams()
 
@@ -46,7 +47,8 @@ async function main () {
   if (!option || !modes[option]) exit(0)
 
   const mode = modes[option]
-  mode()
+
+  videoContext.run({ id: crypto.randomUUID() }, mode)
 }
 
 if (params.interactiveMode) {
