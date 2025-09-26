@@ -17,6 +17,7 @@ export interface ProcessParams {
 export interface VideoOptions {
 	askForResolutions: boolean
 	downloadVideo: boolean
+	downloadAudio: boolean
 	forceDownloadVideo: boolean
 	forceDownloadAudio: boolean
 	syncVideoAndAudio: boolean

@@ -125,6 +125,7 @@ export const Rutas_para_borrar = {
 
 export const response = {
   downloadVideo: 'downloadVideo',
+  downloadAudio: 'downloadAudio',
   askForResolutions: 'askForResolutions',
   forceDownloadVideo: 'forceDownloadVideo',
   forceDownloadAudio: 'forceDownloadAudio',

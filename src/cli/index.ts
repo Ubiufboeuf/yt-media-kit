@@ -32,6 +32,7 @@ async function main () {
       { title: 'Iterar Lista', description: 'Proceso para varios video a la vez', value: 'iterateList' },
       { title: 'Proceso Completo', description: 'Proceso para un video a la vez', value: 'fullProcess' },
       { title: 'Actualizar Lista de Sugeridos', value: 'updateSuggestList' },
+      { title: 'Descargar', value: 'download' },
       { title: 'Limpiar Todo', value: 'clearAll' }
     ]
   })

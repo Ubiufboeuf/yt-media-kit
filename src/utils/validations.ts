@@ -1,9 +1,9 @@
 import { spawnAsync } from '../utils/spawnAsync'
-// import { writ>eFileSync } from 'node:fs'
 import { oraPromise } from 'ora'
 import { getVideoIdFromUrl } from './readUrl'
 import type { Validation } from 'src/env'
 import { errorHandler } from './errorHandler'
+import { DEFAULT_VIDEO_OPTIONS } from 'src/core/constants'
 
 export async function validateVideoId (video: string | URL, downloadVideo: boolean = true): Promise<Validation> {
   let id: string | null = null
@@ -48,4 +48,8 @@ export async function validateVideoId (video: string | URL, downloadVideo: boole
     id,
     title
   }
+}
+
+export function isValidKeyOfVideoOption (o: string): o is keyof typeof DEFAULT_VIDEO_OPTIONS {
+  return o in DEFAULT_VIDEO_OPTIONS
 }
