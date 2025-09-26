@@ -43,9 +43,9 @@ export async function fullProcess () {
    * 
    * 5. [x] Antes de empezar
    *      - Validar video (si falla volver a la pregunta anterior)
+   *      - Crear directorios
    * 
    * 6. [ ] Comenzar con el video
-   *      - Crear directorios
    *      - Ejecutar opciones elegidas antes
    */
 
@@ -240,18 +240,18 @@ export async function fullProcess () {
     await saveVideoInListOfSuggestions(video.ytId, video.title)
   }
 
-  
-  // - - - - - - - - - - - -
-  // 6. Comenzar con el video
-
-  // 6.1 Crear directorios
+  // 5.2 Crear directorios
 
   const createDirectoriesPromise = createDirectories(video.ytId)
   await oraPromise(createDirectoriesPromise, { text: `Creando directorios para ${video.ytId}`, successText: `Directorios para ${video.ytId} creados` })
   
-  // 6.2 Ejecutar opciones elegidas antes
 
-  // 6.2.a Descargar video
+  // - - - - - - - - - - - -
+  // 6. Comenzar con el video
+
+  // 6.1 Ejecutar opciones elegidas antes
+
+  // 6.1.a Descargar video
 
   if (video.options.downloadVideo) {
     let maxResolutionToDownload: Resolution = { desired: '', download: '', desiredNumber: 0, downloadNumber: 0 }
@@ -275,7 +275,7 @@ export async function fullProcess () {
     // await oraPromise(convertAudioPromise, { text: 'Convirtiendo audio', successText: 'Audio convertido', failText: 'No se pudo convertir el audio' })
   }
 
-  // 6.2.b Sincronizar audio+video (mux/demux)
+  // 6.1.b Sincronizar audio+video (mux/demux)
 
   if (video.options.syncVideoAndAudio) { 
     const muxVideoAndAudioPromise = muxVideoAndAudio(video.ytId, video)
@@ -287,25 +287,25 @@ export async function fullProcess () {
     await oraPromise(demuxVideoAndAudioPromise, { text: 'Separando audio y video', successText: 'Audio y video separados correctamente', failText: 'No se pudieron separar el audio y el video' })
   }
 
-  // 6.2.c Crear resoluciones extra
+  // 6.1.c Crear resoluciones extra
 
   if (video) {
     // Resoluciones
   }
 
-  // 6.2.d Crear stream DASH
+  // 6.1.d Crear stream DASH
 
   if (video.options.createDashStream) {
     //
   }
 
-  // 6.2.e Obtener información
+  // 6.1.e Obtener información
 
   if (video.options.getVideoData) {
     //
   }
 
-  // 6.2.f Descargar thumbnails/assets
+  // 6.1.f Descargar thumbnails/assets
 
   if (video.options.getThumbnails) {
     //
