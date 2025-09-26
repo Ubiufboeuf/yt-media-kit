@@ -8,6 +8,8 @@ import { errorHandler } from 'src/utils/errorHandler'
 import { download } from 'src/utils/download'
 import { unlinkSync } from 'node:fs'
 import chalk from 'chalk'
+import { isValidResolution } from 'src/core/video'
+import { DEFAULT_RESOLUTIONS } from 'src/core/constants'
 
 export async function askForResolution () {
   const res = await prompts({
@@ -25,8 +27,15 @@ export async function askForResolution () {
     min: 1
   })
 
-  // Esto puede traer muchos problemas, ten cuidado al modificar algo relacionado a esto
-  return res.value as Resolution[]
+  const resoluciones: Resolution[] = []
+  
+  for (const r of res.value) {
+    if (isValidResolution(r)) {
+      resoluciones.push(r)
+    }
+  }
+
+  return resoluciones.length ? resoluciones : DEFAULT_RESOLUTIONS
 }
 
 export async function getMaxResolutionToDownload (_resoluciones: Resolution[]): Promise<Resolution> {
