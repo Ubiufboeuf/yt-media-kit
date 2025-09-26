@@ -137,3 +137,9 @@ export const response = {
   getVideoData: 'getVideoData',
   getThumbnails: 'getThumbnails'
 }
+
+export const BUGS_PATCHES = {
+	YT_DLP: {
+		extractor_args: '--extractor-args \'youtube:player-client=default,-tv_simply\''
+	}
+}
