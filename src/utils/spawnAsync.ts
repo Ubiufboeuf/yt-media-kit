@@ -1,12 +1,18 @@
 import { spawn } from 'node:child_process'
-import { YT_DLP } from '../lib/constants'
+import { BUGS_PATCHES, YT_DLP } from '../lib/constants'
+import { stringToParams } from './stringToParams'
 
 export async function spawnAsync (
   command: 'yt-dlp' | 'ffmpeg' | 'ffprobe',
   args: string[],
   showOutput: boolean = false
 ): Promise<string> {
-  if (command === 'yt-dlp') command = YT_DLP
+  if (command === 'yt-dlp') {
+    command = YT_DLP
+    console.log(args)
+    args.push(...stringToParams(BUGS_PATCHES.YT_DLP.extractor_args))
+    console.log('post:', args)
+  }
   
   return new Promise((resolve, reject) => {
     const process = spawn(command, args)

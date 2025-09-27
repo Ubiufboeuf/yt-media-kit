@@ -1,9 +1,8 @@
 import { errorHandler } from './errorHandler'
 import { spawnAsync } from './spawnAsync'
-import { BUGS_PATCHES, Rutas } from '../lib/constants'
+import { Rutas } from '../lib/constants'
 import { getResolutionId } from '../core/pipeline/steps/downloadVideo'
 import { getAudioId } from '../core/pipeline/steps/downloadAudio'
-import { stringToParams } from './stringToParams'
 import type { Video } from 'src/core/video'
 
 export async function download (format: 'video' | 'audio', video: Video) {
@@ -18,8 +17,6 @@ export async function download (format: 'video' | 'audio', video: Video) {
     }
     
     const downloadParams = ['-f', `${resolutionId}/mp4`, '-o', `[${maxResToDownload.download}]-%(id)s.%(ext)s`, '-P', Rutas.videos_descargados, `https://www.youtube.com/watch?v=${videoId}`]
-
-    downloadParams.push(...stringToParams(BUGS_PATCHES.YT_DLP.extractor_args))
 
     try {
       await spawnAsync('yt-dlp', downloadParams)
@@ -37,8 +34,6 @@ export async function download (format: 'video' | 'audio', video: Video) {
     }
     
     const ytDlpParamsAudio = ['-f', `${audioId}`, '-x', '--audio-format', 'opus', '-o', '%(id)s.opus', '-P', Rutas.audios_descargados, `https://www.youtube.com/watch?v=${videoId}`]
-
-    ytDlpParamsAudio.push(...stringToParams(BUGS_PATCHES.YT_DLP.extractor_args))
 
     try {
       await spawnAsync('yt-dlp', ytDlpParamsAudio)
