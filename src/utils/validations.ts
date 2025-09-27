@@ -5,7 +5,7 @@ import type { Validation } from 'src/env'
 import { errorHandler } from './errorHandler'
 import { DEFAULT_VIDEO_OPTIONS } from 'src/core/constants'
 
-export async function validateVideoId (video: string | URL, downloadVideo: boolean = true): Promise<Validation> {
+export async function validateVideoId (video: string | URL, downloadVideo: boolean = true, downloadAudio: boolean = true): Promise<Validation> {
   let id: string | null = null
 
   if (video instanceof URL) {
@@ -18,7 +18,7 @@ export async function validateVideoId (video: string | URL, downloadVideo: boole
     throw new Error('No se pudo conseguir el id del video')
   }
 
-  if (!downloadVideo) {
+  if (!downloadVideo && !downloadAudio) {
     return {
       success: true,
       id: '',
