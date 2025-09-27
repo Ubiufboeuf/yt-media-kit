@@ -76,7 +76,7 @@ export async function download () {
       },
       {
         title: 'Preguntar resoluciones para descargar',
-        description: 'Si desmarcas esta opción se descargará en 360p',
+        description: 'Si desmarcas esta opción se descargará en 360p. Incluso marcada, si no marcas "Descargar video" esta no hará nada',
         value: response.askForResolutions,
         selected: true
       }
