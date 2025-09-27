@@ -34,13 +34,14 @@ export async function fullProcess () {
    *      - Obtener información
    *      - Descargar thumbnails/assets
    * 
-   * 3. [x] Opcional
-   *      - Preguntar las resoluciones (si lo marcó antes)
-   * 
-   * 4. [x] Forma de elegir el video
+   * 3. [x] Forma de elegir el video
    *      - Escribir ID
    *      - Escribir la url
    *      - Usar lista de sugeridos
+   * 
+   * 4. [x] Opcional
+   *      - Preguntar las resoluciones (si lo marcó antes)
+   * 
    * 
    * 5. [x] Antes de empezar
    *      - Validar video (si falla volver a la pregunta anterior)
@@ -153,25 +154,8 @@ export async function fullProcess () {
   }
 
 
-  // - - - - - -
-  // 3. Opcional
-
-  // 3.1 Preguntar las resoluciones (si lo marcó antes)
-  
-  let resolutions: Resolution[] | null = null
-
-  // Las resoluciones van en base a lo preguntado, o sino por defecto (360p)
-  if (videoDraft.options.downloadVideo && videoDraft.options.askForResolutions) {
-    resolutions = await askForResolution()
-  }
-
-  if (resolutions?.length && resolutions.every((r) => isValidResolution(r))) { 
-    videoDraft.resolutions = resolutions
-  }
-  
-  
   // - - - - - - - - - - - - - -
-  // 4. Forma de elegir el video
+  // 3. Forma de elegir el video
 
   let video: Video | null = null
   
@@ -216,6 +200,23 @@ export async function fullProcess () {
 
   if (!video || !video?.id) return
 
+
+  // - - - - - -
+  // 4. Opcional
+
+  // 4.1 Preguntar las resoluciones (si lo marcó antes)
+  
+  let resolutions: Resolution[] | null = null
+
+  // Las resoluciones van en base a lo preguntado, o sino por defecto (360p)
+  if (videoDraft.options.downloadVideo && videoDraft.options.askForResolutions) {
+    resolutions = await askForResolution()
+  }
+
+  if (resolutions?.length && resolutions.every((r) => isValidResolution(r))) { 
+    videoDraft.resolutions = resolutions
+  }
+  
   
   // - - - - - - - - - -
   // 5. Antes de empezar
