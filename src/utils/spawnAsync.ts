@@ -9,9 +9,7 @@ export async function spawnAsync (
 ): Promise<string> {
   if (command === 'yt-dlp') {
     command = YT_DLP
-    console.log(args)
     args.push(...stringToParams(BUGS_PATCHES.YT_DLP.extractor_args))
-    console.log('post:', args)
   }
   
   return new Promise((resolve, reject) => {
