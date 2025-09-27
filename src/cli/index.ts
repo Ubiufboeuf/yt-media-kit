@@ -5,13 +5,14 @@ import chalk from 'chalk'
 import { fullProcess } from '../cli/commands/fullProcess'
 import { clearAll } from '../cli/commands/resetAndClean'
 import type { Modes } from '../env'
-import { loadProcessParams } from 'src/core/process'
+import { loadProcessParams, loadProcessPreferences } from 'src/core/process'
 import { updateSuggestList } from './commands/updateSuggestList'
 import { showHelp, showVersion } from 'src/core/helper'
 import { videoContext } from 'src/core/context'
 import { download } from './commands/download'
 
 const params = loadProcessParams()
+const preferences = loadProcessPreferences()
 
 async function main () {
   console.clear()

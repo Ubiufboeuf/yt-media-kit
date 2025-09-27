@@ -3,6 +3,7 @@ import type { Video } from './video'
 export interface Process {
   videos: Video[]
   params: ProcessParams
+	preferences: ProcessPreferences
 }
 
 export interface ProcessParams {
@@ -12,6 +13,10 @@ export interface ProcessParams {
   isDevMode?: boolean
   skipValidation?: boolean
   useDefaultVideoId?: boolean
+}
+
+export interface ProcessPreferences {
+	outdir?: string
 }
 
 export interface VideoOptions {

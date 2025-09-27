@@ -1,6 +1,6 @@
-import type { Process } from 'src/core/types'
+import type { Process, ProcessPreferences } from 'src/core/types'
 import type { ProcessParams } from 'src/core/types'
-import { Arguments, listOfParamsToCancelInteractiveMode } from 'src/core/constants'
+import { Arguments, DEFAULT_PROCESS_PREFERENCES, listOfParamsToCancelInteractiveMode } from 'src/core/constants'
 import { argv } from 'node:process'
 import { devParams } from './constants'
 import { Video, type VideoDraft } from './video'
@@ -14,7 +14,8 @@ const process: Process = {
     isDevMode: false,
     skipValidation: false,
     useDefaultVideoId: false
-  }
+  },
+  preferences: DEFAULT_PROCESS_PREFERENCES
 }
 
 // === === === === === === === ===
@@ -76,6 +77,25 @@ export function loadProcessParams (): ProcessParams {
   }
 
   return processParams
+}
+
+export function isValidProcessPreferencesKey (key: string): key is keyof typeof process.preferences {
+  return key in process.preferences
+}
+
+export function loadProcessPreferences (): ProcessPreferences {
+  const preferences: ProcessPreferences = {}
+
+  for (const arg of argv)  {
+    if (!arg.includes('=')) continue
+
+    const [key, value] = arg.split('=')
+    if (!key || !value || !isValidProcessPreferencesKey(key)) continue
+
+    preferences[key] = value
+  }
+  
+  return preferences
 }
 
 

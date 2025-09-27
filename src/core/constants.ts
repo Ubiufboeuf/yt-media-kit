@@ -1,5 +1,9 @@
 import type { Resolution } from 'src/env'
-import type { ProcessParams, VideoOptions } from './types'
+import type { ProcessParams, ProcessPreferences, VideoOptions } from './types'
+
+export const DEFAULT_PROCESS_PREFERENCES: ProcessPreferences = {
+  outdir: undefined
+}
 
 export const DEFAULT_VIDEO_OPTIONS: VideoOptions = {
   askForResolutions: false,
@@ -36,6 +40,7 @@ export const Arguments = {
 	help: '--help',
 	version: '--version',
 	dev: '--dev',
+	outdir: '--outdir=',
 	skipValidation: '--skip-validation',
 	useDefaultVideoId: '--use-default-video-id'
 }
