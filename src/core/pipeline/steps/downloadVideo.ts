@@ -125,7 +125,7 @@ export async function descargarVideo (video: Video) {
 
   if (!videosDescargados.some((file) => file.includes(videoId))) {
     // Si no hay videos descargados con este id, descarga la máxima resolución que quiere el usuario
-    await download('video', videoId, forceDownload, maxResToDownload)
+    await download('video', video)
     return
   }
 
@@ -143,7 +143,7 @@ export async function descargarVideo (video: Video) {
     if (forceDownload) {
       // Si el usuario tiene descargada la misma resolución que quiere, pero fuerza, descarga
       unlinkSync(`${Rutas.videos_descargados}/${videoDescargado}`)
-      await download('video', videoId, true, maxResToDownload)
+      await download('video', video)
       return
     }
 
@@ -152,6 +152,6 @@ export async function descargarVideo (video: Video) {
   }
 
   // Si es mayor o menor, pero diferente a la que tiene el usuario, descarga
-  await download('video', videoId, forceDownload, maxResToDownload)
+  await download('video', video)
   unlinkSync(`${Rutas.videos_descargados}/${videoDescargado}`)
 }

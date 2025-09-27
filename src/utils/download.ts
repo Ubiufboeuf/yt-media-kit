@@ -1,4 +1,3 @@
-import type { Resolution } from '../env'
 import { errorHandler } from './errorHandler'
 import { spawnAsync } from './spawnAsync'
 import { BUGS_PATCHES, Rutas } from '../lib/constants'
@@ -6,9 +5,12 @@ import { readdirSync, renameSync, unlinkSync } from 'node:fs'
 import { getResolutionId } from '../core/pipeline/steps/downloadVideo'
 import { getAudioId } from '../core/pipeline/steps/downloadAudio'
 import { stringToParams } from './stringToParams'
+import type { Video } from 'src/core/video'
 
-export async function download (format: 'video' | 'audio', videoId: string, forceDownload: boolean, maxResToDownload: Resolution | 'audio') {
-  if (format === 'video' && maxResToDownload !== 'audio') {
+export async function download (format: 'video' | 'audio', video: Video) {
+  if (format === 'video' && video.maxResolutionToDownload) {
+    const { ytId: videoId, maxResolutionToDownload: maxResToDownload } = video
+
     let resolutionId = ''
     try {
       resolutionId = await getResolutionId(videoId, maxResToDownload.download)
@@ -25,7 +27,9 @@ export async function download (format: 'video' | 'audio', videoId: string, forc
     } catch (err) {
       errorHandler(err, 'Error descargando el video', true)
     }
-  } else if (format === 'audio' && maxResToDownload === 'audio') {
+  } else if (format === 'audio') {
+    const { ytId: videoId } = video
+
     let audioId = ''
     try {
       audioId = await getAudioId(videoId)

@@ -59,5 +59,5 @@ export async function descargarAudio (video: Video) {
     return
   }
   
-  return await download('audio', videoId, forceDownload, 'audio')
+  return await download('audio', video)
 }
