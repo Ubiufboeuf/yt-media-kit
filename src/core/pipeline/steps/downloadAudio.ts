@@ -4,6 +4,7 @@ import { readdirSync } from 'node:fs'
 import { Rutas } from 'src/lib/constants'
 import chalk from 'chalk'
 import { download } from 'src/utils/download'
+import { type Video } from 'src/core/video'
 
 export async function getAudioId (videoId: string) {
   const ytDlpParams = ['-F', `https://www.youtube.com/watch?v=${videoId}`]
@@ -47,7 +48,9 @@ export async function getAudioId (videoId: string) {
   return best_id.id
 }
 
-export async function descargarAudio (videoId: string, forceDownload: boolean = false) {
+export async function descargarAudio (video: Video) {
+  const { ytId: videoId, options: { forceDownloadAudio: forceDownload } } = video
+
   const audiosPorProcesar = readdirSync(Rutas.audios_descargados)
   const existeAudio = audiosPorProcesar.some((f) => f.includes(videoId))
 

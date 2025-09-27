@@ -265,10 +265,10 @@ export async function fullProcess () {
 
     video.maxResolutionToDownload = maxResolutionToDownload
 
-    const downloadVideosPromise = descargarVideo(video.ytId, maxResolutionToDownload, video.options.forceDownloadVideo)
+    const downloadVideosPromise = descargarVideo(video)
     await oraPromise(downloadVideosPromise, { text: 'Descargando video', successText: 'Video descargado', failText: 'No se pudo descargar el video' })
 
-    const downloadAudioPromise = descargarAudio(video.ytId, video.options.forceDownloadAudio)
+    const downloadAudioPromise = descargarAudio(video)
     await oraPromise(downloadAudioPromise, { text: 'Descargando audio', successText: 'Audio descargado', failText: 'No se pudo descargar el audio' })
 
     // Por ahora lo saco, si veo que da problemas tenerlo en .opus en vez de .mp4 sigo esto

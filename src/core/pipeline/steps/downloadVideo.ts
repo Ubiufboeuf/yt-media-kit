@@ -8,7 +8,7 @@ import { errorHandler } from 'src/utils/errorHandler'
 import { download } from 'src/utils/download'
 import { unlinkSync } from 'node:fs'
 import chalk from 'chalk'
-import { isValidResolution } from 'src/core/video'
+import { isValidResolution, type Video } from 'src/core/video'
 import { DEFAULT_RESOLUTIONS } from 'src/core/constants'
 
 export async function askForResolution () {
@@ -112,7 +112,9 @@ export async function getResolutionId (videoId: string, download: string) {
   return best_id.id
 }
 
-export async function descargarVideo (videoId: string, maxResToDownload: Resolution, forceDownload: boolean = false) {
+export async function descargarVideo (video: Video) {
+  const { ytId: videoId, maxResolutionToDownload: maxResToDownload, options: { forceDownloadVideo: forceDownload = false } } = video
+  
   // console.log('descargar video', videoId, resolutions, maxResToDownload, forceDownload)
   let videosDescargados: string[] = []
   try {

@@ -198,13 +198,13 @@ export async function download () {
 
     video.maxResolutionToDownload = maxResolutionToDownload
 
-    const downloadVideosPromise = descargarVideo(video.ytId, maxResolutionToDownload, video.options.forceDownloadVideo)
+    const downloadVideosPromise = descargarVideo(video)
     await oraPromise(downloadVideosPromise, { text: 'Descargando video', successText: 'Video descargado', failText: 'No se pudo descargar el video' })
 
   }
 
   if (video.options.downloadAudio) {
-    const downloadAudioPromise = descargarAudio(video.ytId, video.options.forceDownloadAudio)
+    const downloadAudioPromise = descargarAudio(video)
     await oraPromise(downloadAudioPromise, { text: 'Descargando audio', successText: 'Audio descargado', failText: 'No se pudo descargar el audio' })
   }
 }
