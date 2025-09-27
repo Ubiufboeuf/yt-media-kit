@@ -22,6 +22,10 @@ const process: Process = {
 // ===  Funciones del proceso  ===
 // === === === === === === === ===
 
+export function setProcessMode (mode: string) {
+  process.mode = mode
+}
+
 export function isValidProcessParamKey (key: string): key is keyof typeof process.params {
   return key in process.params
 }

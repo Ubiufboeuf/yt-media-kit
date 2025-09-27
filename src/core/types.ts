@@ -2,6 +2,7 @@ import type { Video } from './video'
 
 export interface Process {
   videos: Video[]
+	mode?: string
   params: ProcessParams
 	preferences: ProcessPreferences
 }

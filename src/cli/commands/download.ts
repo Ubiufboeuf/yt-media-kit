@@ -5,7 +5,7 @@ import { DEFAULT_RESOLUTIONS, MAX_RESOLUTION_TO_DOWNLOAD } from 'src/core/consta
 import { videoContext } from 'src/core/context'
 import { createDirectories } from 'src/core/pipeline/steps/createDirectories'
 import { askForResolution, descargarVideo, getMaxResolutionToDownload } from 'src/core/pipeline/steps/downloadVideo'
-import { addNewVideo, getProcessParam } from 'src/core/process'
+import { addNewVideo, getProcessParam, loadProcessPreferences } from 'src/core/process'
 import { type Video, VideoDraft } from 'src/core/video'
 import type { Resolution, Validation } from 'src/env'
 import { response } from 'src/lib/constants'
@@ -15,6 +15,7 @@ import { saveVideoInListOfSuggestions } from 'src/utils/saveVideoInList'
 import { isValidKeyOfVideoOption, validateVideoId } from 'src/utils/validations'
 import { descargarAudio } from 'src/core/pipeline/steps/downloadAudio'
 
+const preferences = loadProcessPreferences()
 const useDefaultVideoId = getProcessParam('useDefaultVideoId')
 const skipValidation = getProcessParam('skipValidation')
 
