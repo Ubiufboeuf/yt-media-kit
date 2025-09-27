@@ -24,7 +24,7 @@ import type { ALIGNMENT, BGCOLORS, COLORS, FONTFACES, GRADIENTCOLORS, GRADIENTS 
 	 * @param  {boolean}                 options.rawMode             - A switch for raw mode in terminals
 	 */
 
-export interface CFontsSettings {
+export type CFontsSettings = {
   font?: keyof Fontfaces
   align?: keyof Alignment
   colors?: (keyof Colors)[]
@@ -48,7 +48,7 @@ type Gradients = typeof GRADIENTS
 type Alignment = typeof ALIGNMENT
 type Fontfaces = typeof FONTFACES
 
-export interface Resolution {
+export type Resolution = {
 	download: string
 	desired: string
 	downloadNumber: number
@@ -73,11 +73,11 @@ export type List = {
 	title: string
 }[]
 
-export interface Modes {
+export type Modes = {
 	[key: string]: () => (Promise<void> | void)
 }
 
-export interface Validation {
+export type Validation = {
 	success: boolean
 	error?: string
 	id: string

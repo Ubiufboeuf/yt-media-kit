@@ -1,13 +1,13 @@
 import type { Video } from './video' 
 
-export interface Process {
+export type Process = {
   videos: Video[]
 	mode?: string
   params: ProcessParams
 	preferences: ProcessPreferences
 }
 
-export interface ProcessParams {
+export type ProcessParams = {
 	help?: boolean
 	version?: boolean
 	interactiveMode: boolean
@@ -16,11 +16,11 @@ export interface ProcessParams {
   useDefaultVideoId?: boolean
 }
 
-export interface ProcessPreferences {
+export type ProcessPreferences = {
 	outdir?: string
 }
 
-export interface VideoOptions {
+export type VideoOptions = {
 	askForResolutions: boolean
 	downloadVideo: boolean
 	downloadAudio: boolean
