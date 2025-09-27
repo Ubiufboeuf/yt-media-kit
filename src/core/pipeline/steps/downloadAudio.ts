@@ -5,6 +5,7 @@ import { Rutas } from 'src/lib/constants'
 import chalk from 'chalk'
 import { download } from 'src/utils/download'
 import { type Video } from 'src/core/video'
+import { rename, unlink } from 'node:fs/promises'
 
 export async function getAudioId (videoId: string) {
   const ytDlpParams = ['-F', `https://www.youtube.com/watch?v=${videoId}`]
@@ -58,6 +59,15 @@ export async function descargarAudio (video: Video) {
     console.log(chalk.gray('\n(Ya existe el audio, omitiendo)'))
     return
   }
-  
-  return await download('audio', video)
+
+  if (forceDownload && existeAudio) {
+    await rename(`${Rutas.audios_descargados}/${videoId}.opus`, `${Rutas.audios_descargados}/${videoId}.old.opus`)
+  }
+
+  await download('audio', video)
+
+  const audios = readdirSync(Rutas.audios_descargados)
+  if (audios.includes(`${videoId}.opus`) && audios.includes(`${videoId}.old.opus`)) {
+    await unlink(`${Rutas.audios_descargados}/${videoId}.old.opus`)
+  }
 }

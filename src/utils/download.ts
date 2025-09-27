@@ -1,7 +1,6 @@
 import { errorHandler } from './errorHandler'
 import { spawnAsync } from './spawnAsync'
 import { BUGS_PATCHES, Rutas } from '../lib/constants'
-import { readdirSync, renameSync, unlinkSync } from 'node:fs'
 import { getResolutionId } from '../core/pipeline/steps/downloadVideo'
 import { getAudioId } from '../core/pipeline/steps/downloadAudio'
 import { stringToParams } from './stringToParams'
@@ -41,22 +40,10 @@ export async function download (format: 'video' | 'audio', video: Video) {
 
     ytDlpParamsAudio.push(...stringToParams(BUGS_PATCHES.YT_DLP.extractor_args))
 
-    if (forceDownload) {
-      const audios = readdirSync(Rutas.audios_descargados)
-      if (audios.includes(`${videoId}.opus`)) {
-        renameSync(`${Rutas.audios_descargados}/${videoId}.opus`, `${Rutas.audios_descargados}/${videoId}.old.opus`)
-      }
-    }
-
     try {
       await spawnAsync('yt-dlp', ytDlpParamsAudio)
     } catch (err) {
       errorHandler(err, 'Error descargando el audio', true)
-    }
-
-    const audios = readdirSync(Rutas.audios_descargados)
-    if (audios.includes(`${videoId}.opus`) && audios.includes(`${videoId}.old.opus`)) {
-      unlinkSync(`${Rutas.audios_descargados}/${videoId}.old.opus`)
     }
   }
 }
