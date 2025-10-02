@@ -1,7 +1,7 @@
 {
   "name": "yt-media-kit",
   "version": "2025.09.27",
-  "description": "",
+  "description": "Kit de herramientas para conseguir videos, datos y assets de youtube",
   "main": "src/cli/index.ts",
   "bin": {
     "yt-media-kit": "./bin/yt-media-kit"
