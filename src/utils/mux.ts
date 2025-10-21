@@ -14,6 +14,11 @@ export async function mux (ytId: string) {
 
   const videoDescargado = videos.find((file) => file.includes(ytId))
 
+  if (!videoDescargado) {
+    console.error(`\nNo se encontró ningún video descargado para ${ytId}`)
+    return
+  }
+
   let audios: string[] = []
   try {
     audios = await readdir(Rutas.audios_descargados)
@@ -22,6 +27,11 @@ export async function mux (ytId: string) {
   }
 
   const audioDescargado = audios.find((file) => file.includes(ytId))
+
+  if (!audioDescargado) {
+    console.error(`\nNo se encontró ningún video descargado para ${ytId}`)
+    return
+  }
   
   let resolution: number = 0
   try {
