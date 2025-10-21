@@ -6,6 +6,7 @@
       "dependencies": {
         "boxen": "8.0.1",
         "cfonts": "3.3.1",
+        "cfonts-for-bun": "3.3.2",
         "chalk": "5.6.0",
         "cli-table3": "0.6.5",
         "fs-extra": "11.3.1",
@@ -168,6 +169,8 @@
     "ccount": ["ccount@2.0.1", "", {}, "sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg=="],
 
     "cfonts": ["cfonts@3.3.1", "", { "dependencies": { "supports-color": "^8", "window-size": "^1" }, "bin": { "cfonts": "bin/index.js" } }, "sha512-ZGEmN3W9mViWEDjsuPo4nK4h39sfh6YtoneFYp9WLPI/rw8BaSSrfQC6jkrGW3JMvV3ZnExJB/AEqXc/nHYxkw=="],
+
+    "cfonts-for-bun": ["cfonts-for-bun@3.3.2", "", { "dependencies": { "supports-color": "^8", "window-size": "^1" }, "bin": { "cfonts": "bin/index.js" } }, "sha512-/USYlZUzGDA2CBjSQzTqtQK6emDegt80Llpj7btmzG8sVT61mvQ+D44B9q8EanLuY4vL8xRwkf8TgZQhQyoF7w=="],
 
     "chalk": ["chalk@5.6.0", "", {}, "sha512-46QrSQFyVSEyYAgQ22hQ+zDa60YHA4fBstHmtSApj1Y5vKtG27fWowW03jCk5KcbXEWPZUIR894aARCA/G1kfQ=="],
 
