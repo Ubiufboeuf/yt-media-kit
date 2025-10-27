@@ -6,7 +6,7 @@ import type { VideoOptions } from '../../core/types'
 import { descargarAudio } from '../../core/pipeline/steps/downloadAudio'
 import list from '../../lib/list-of-videos-to-suggest.json' with { type: 'json' }
 import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/sync'
-import { response } from 'src/lib/constants'
+import { response as programOptions } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { getVideoIdFromUrl } from 'src/utils/readUrl'
 import  { addNewVideo, getProcessParam } from 'src/core/process'
@@ -35,84 +35,95 @@ export async function fullProcess () {
   const videoDraft = new VideoDraft(context.id)
 
   // Opciones para ejecutar el programa
-  const optionsResponse = await prompts({
+  const programOptionsResponse = await prompts({
     message: 'Elige las opciones para ejecutar el programa',
     type: 'multiselect',
     name: 'value',
-    instructions: 'Muevete con ↑↓, selecciona con espacio y continua con enter',
+    instructions: 'Muevete con ↑↓, selecciona con espacio y continua con enter ',
+    min: 1,
     choices: [
       {
         title: 'Descargar video',
         description: 'Si lo desactivas buscará si tienes el video descargado, con audio, o alguna resolución de este, y sino, se cancelará el proceso',
-        value: response.downloadVideo,
-        selected: true
+        value: programOptions.downloadVideo,
+        selected: false
       },
       {
         title: 'Preguntar resoluciones',
         description: 'Pregunta por las resoluciones que quieras tener, y sino elige 360p',
-        value: response.askForResolutions,
-        selected: true
-      },
-      {
-        title: 'Sobreescribir descarga de video',
-        description: 'Fuerza una descarga del video, incluso si ya existe',
-        value: response.forceDownloadVideo,
-        selected: false
-      },
-      {
-        title: 'Sobreescribir descarga de audio',
-        description: 'Fuerza una descarga del audio, incluso si ya existe',
-        value: response.forceDownloadAudio,
+        value: programOptions.askForResolutions,
         selected: false
       },
       {
         title: 'Sincronizar video con audio',
         description: 'Unir video con audio antes de crear las resoluciones',
-        value: response.syncVideoAndAudio,
-        selected: true
-      },
-      {
-        title: 'Sobreescribir video sincronizado',
-        description: 'Fuerza la mezcla del video con el audio, incluso si ya existe. Depende de la opción anterior marcada',
-        value: response.forceSync,
+        value: programOptions.syncVideoAndAudio,
         selected: false
       },
       {
         title: 'Separar video y audio',
         description: 'Separa el video y el audio antes de crear las resoluciones',
-        value: response.unsyncVideoAndAudio,
-        selected: true
-      },
-      {
-        title: 'Sobreescribir video y audio separados',
-        description: 'Fuerza la separación del video y del audio, incluso si ya existen. Depende de la opción anterior marcada',
-        value: response.forceUnsync,
+        value: programOptions.unsyncVideoAndAudio,
         selected: false
       },
       {
         title: 'Crear stream del video en formato DASH',
         description: 'Crea un stream del video, separándolo en fragmentos y creando un manifest de ellos. Ideal para un reproductor de video via streaming como YouTube o Twitch',
-        value: response.createDashStream,
-        selected: true
+        value: programOptions.createDashStream,
+        selected: false
       },
       {
         title: 'Obtener datos e información del video',
         description: 'Consigue información detallada del video en base a yt-dlp',
-        value: response.getVideoData,
-        selected: true
+        value: programOptions.getVideoData,
+        selected: false
       },
       {
         title: 'Conseguir carátulas',
         description: 'Consigue diferentes resoluciones de la caratula del video',
-        value: response.getThumbnails,
-        selected: true
+        value: programOptions.getThumbnails,
+        selected: false
+      }
+    ]
+  })
+
+  // Opciones para forzar del programa
+  const programForceResponse = await prompts({
+    message: 'Elige las opciones para forzar del programa',
+    type: 'multiselect',
+    name: 'value',
+    instructions: 'Muevete con ↑↓, selecciona con espacio y continua con enter ',
+    choices: [
+      {
+        title: 'Sobreescribir descarga de video',
+        description: 'Fuerza una descarga del video, incluso si ya existe',
+        value: programOptions.forceDownloadVideo,
+        selected: false
+      },
+      {
+        title: 'Sobreescribir descarga de audio',
+        description: 'Fuerza una descarga del audio, incluso si ya existe',
+        value: programOptions.forceDownloadAudio,
+        selected: false
+      },
+      {
+        title: 'Sobreescribir video sincronizado',
+        description: 'Fuerza la mezcla del video con el audio, incluso si ya existe. Depende de la opción anterior marcada',
+        value: programOptions.forceSync,
+        selected: false
+      },
+      {
+        title: 'Sobreescribir video y audio separados',
+        description: 'Fuerza la separación del video y del audio, incluso si ya existen. Depende de la opción anterior marcada',
+        value: programOptions.forceUnsync,
+        selected: false
       }
     ]
   })
 
   // Agregar opciones elegidas a options, validando tipos
-  for (const opcionElegida of optionsResponse.value as (keyof VideoOptions)[]) {
-    const keys = Object.keys(response)
+  for (const opcionElegida of [...(programOptionsResponse.value || []), ...(programForceResponse.value || [])] as (keyof VideoOptions)[]) {
+    const keys = Object.keys(programOptions)
     if (keys.includes(opcionElegida)) {
       videoDraft.options[opcionElegida] = true
     }
