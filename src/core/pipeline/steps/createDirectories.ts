@@ -9,7 +9,7 @@ export async function createDirectories (videoId: string) {
   await mkdirp(Rutas.videos)
   await mkdirp(Rutas.audios)
 
-  await mkdirp(`${Rutas.completos}/${videoId}`)
+  await mkdirp(`${Rutas.terminados}/${videoId}`)
   await mkdirp(`${Rutas.assets}/${videoId}`)
 
   await mkdirp(`${Rutas.info}`)
