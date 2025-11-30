@@ -176,12 +176,12 @@ export async function fullProcess () {
 
   // Preguntar las resoluciones si lo marcó antes (por defecto 360p)
   let resolutions: Resolution[] | null = null
-  if (videoDraft.options.downloadVideo && videoDraft.options.askForResolutions) {
+  if (video.options.downloadVideo && video.options.askForResolutions) {
     resolutions = await askForResolution()
   }
 
   if (resolutions?.length && resolutions.every((r) => isValidResolution(r))) { 
-    videoDraft.resolutions = resolutions
+    video.resolutions = resolutions
   }
   
   // Validar video
