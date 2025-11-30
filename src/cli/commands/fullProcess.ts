@@ -208,6 +208,7 @@ export async function fullProcess () {
   const createDirectoriesPromise = createDirectories(video.ytId)
   await oraPromise(createDirectoriesPromise, { text: `Creando directorios para ${video.ytId}`, successText: `Directorios para ${video.ytId} creados` })
   
+  video.options.downloadAudio = true
   // Descargar video
   if (video.options.downloadVideo) {
     let maxResolutionToDownload: Resolution = MAX_RESOLUTION_TO_DOWNLOAD
