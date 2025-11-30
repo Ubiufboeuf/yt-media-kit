@@ -17,6 +17,7 @@ import { videoContext } from 'src/core/context'
 import { isValidResolution, VideoDraft, type Video } from 'src/core/video'
 import { MAX_RESOLUTION_TO_DOWNLOAD } from 'src/core/constants'
 import { createResolutions } from 'src/core/pipeline/steps/createResolutions'
+import { createStreams } from 'src/core/pipeline/steps/createStreams'
 
 const useDefaultVideoId = getProcessParam('useDefaultVideoId')
 
@@ -246,7 +247,8 @@ export async function fullProcess () {
 
   // Crear stream DASH
   if (video.options.createDashStream) {
-    // ...
+    const createResolutionsPromise = createStreams(video.ytId, video)
+    await oraPromise(createResolutionsPromise, { text: 'Creando streams', successText: 'Streams del video creados', failText: 'No se pudieron crear los streams del video' })
   }
 
   // Obtener información

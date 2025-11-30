@@ -29,7 +29,7 @@ export async function createResolutions (ytId: string, video: Video) {
   // console.log(resoluciones)
   if (resoluciones.every((r) => r.pending === false)) {
     console.log(chalk.gray('\n(Todas las resoluciones están creadas, omitiendo)'))
-    process.exit(0)
+    return
   }
   
 
