@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import { readdir } from 'node:fs/promises'
 import type { Video } from 'src/core/video'
 import { Rutas } from 'src/lib/constants'
@@ -9,12 +10,12 @@ export async function createResolutions (ytId: string, video: Video) {
   try {
     videosProcesados = await readdir(Rutas.videos)
   } catch (err) {
-    errorHandler(err, 'Error leyendo la ruta de videos procesados')
+    errorHandler(err, '\nError leyendo la ruta de videos procesados')
     return
   }
 
   if (!videosProcesados.some((file) => file.includes(ytId))) {
-    console.error('No se encontró ninguna resolución del video en la carpeta de procesados, omitiendo')
+    console.error(chalk.gray('\n(No se encontró ninguna resolución del video en la carpeta de procesados, omitiendo'))
     return
   }
 
@@ -27,7 +28,7 @@ export async function createResolutions (ytId: string, video: Video) {
   })
   // console.log(resoluciones)
   if (resoluciones.every((r) => r.pending === false)) {
-    console.log('Todas las resoluciones están creadas, omitiendo')
+    console.log(chalk.gray('\n(Todas las resoluciones están creadas, omitiendo)'))
     process.exit(0)
   }
   
@@ -41,7 +42,7 @@ export async function createResolutions (ytId: string, video: Video) {
   
   const videoName = videosProcesados.find((file) => file.includes(ytId) && file.includes(video.maxResolutionToDownload.download))
   if (!videoName) {
-    console.error('Error encontrando un video que debería existir. No toques los archivos en medio del programa, tontón')
+    console.error('\nError encontrando un video que debería existir. No toques los archivos en medio del programa, tontón')
     // Si se llega acá y no es por lo que dice el log, perdón, no sos tontón
     return
   }
