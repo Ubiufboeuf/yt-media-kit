@@ -14,7 +14,7 @@ export async function demuxAudio (ytId: string) {
   const videoConAudio = videosConAudio.find((file) => file.includes(ytId))
   
   
-  const ffmpegParams = ['-i', `${Rutas.videos_con_audio}/${videoConAudio}`, '-vn', '-map', '0:a', '-c:a', 'copy', `${Rutas.audios}/${videoConAudio}`]
+  const ffmpegParams = ['-i', `${Rutas.videos_con_audio}/${videoConAudio}`, '-vn', '-map', '0:a', '-c:a', 'copy', `${Rutas.audios}/${ytId}.mp4`]
 
   try {
     await spawnAsync('ffmpeg', ffmpegParams)
