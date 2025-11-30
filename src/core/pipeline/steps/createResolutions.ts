@@ -20,7 +20,7 @@ export async function createResolutions (ytId: string, video: Video) {
   }
 
   const resoluciones = video.resolutions.map((r) => {
-    if (videosProcesados.some((file) => file.includes(r.desired))) {
+    if (videosProcesados.some((file) => file.includes(r.desired) && file.includes(ytId))) {
       return { pending: false, r }
     }
     
