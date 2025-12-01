@@ -19,6 +19,7 @@ import { MAX_RESOLUTION_TO_DOWNLOAD } from 'src/core/constants'
 import { createResolutions } from 'src/core/pipeline/steps/createResolutions'
 import { createStreams } from 'src/core/pipeline/steps/createStreams'
 import { getVideoData } from 'src/core/pipeline/steps/getVideoData'
+import { getVideoAssets } from 'src/core/pipeline/steps/getVideoAssets'
 
 const useDefaultVideoId = getProcessParam('useDefaultVideoId')
 
@@ -261,6 +262,7 @@ export async function fullProcess () {
 
   // Descargar thumbnails/assets
   if (video.options.getThumbnails) {
-    // ...
+    const getVideoAssetsPromise = getVideoAssets(video.ytId, video)
+    await oraPromise(getVideoAssetsPromise, { text: 'Consiguiendo assets del video', successText: 'Assets conseguidos', failText: 'Error consiguiendo los assets del video' })
   }
 }

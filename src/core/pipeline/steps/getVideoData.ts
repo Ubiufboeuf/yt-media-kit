@@ -1,4 +1,5 @@
 import { readdir, stat, writeFile } from 'node:fs/promises'
+import { videoContext } from 'src/core/context'
 import type { FormatMetadata, Stream } from 'src/core/ffmpeg.types'
 import type { AudioMetadata, ResolutionMetadata, VideoMetadata } from 'src/core/types'
 import type { Video } from 'src/core/video'
@@ -8,6 +9,18 @@ import { errorHandler } from 'src/utils/errorHandler'
 import { spawnAsync } from 'src/utils/spawnAsync'
 
 export async function getVideoData (ytId: string, video: Video) {
+  // Cargar contexto
+  let context
+  try {  
+    context = videoContext.getStore()
+    if (!context) {
+      throw new Error('Falta el contexto')
+    }
+  } catch (err) {
+    errorHandler(err)
+    return
+  }
+  
   let carpetaVideosConAudio: string[] = []
   let carpetaVideos: string[] = []
   let carpetaAudios: string[] = []
@@ -76,6 +89,8 @@ export async function getVideoData (ytId: string, video: Video) {
     errorHandler(err, 'Error parseando la salida de los datos del video')
     return
   }
+
+  context.yt_dlp_data = json
 
   videoData.title = json.title
   videoData.uploader = json.uploader
