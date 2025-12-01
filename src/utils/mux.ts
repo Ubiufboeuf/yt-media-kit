@@ -41,7 +41,7 @@ export async function mux (ytId: string) {
     errorHandler(err, 'Error consiguiendo la resolución del video descargado')
   }
   
-  const ffmpegParams = ['-i', `${Rutas.videos_descargados}/${videoDescargado}`, '-i', `${Rutas.audios_descargados}/${audioDescargado}`, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'libopus', '-strict', 'experimental', '-shortest', `${Rutas.videos_con_audio}/[${resolution}p]-${ytId}.mp4`]
+  const ffmpegParams = ['-i', `${Rutas.videos_descargados}/${videoDescargado}`, '-i', `${Rutas.audios_descargados}/${audioDescargado}`, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-strict', 'experimental', '-shortest', `${Rutas.videos_con_audio}/[${resolution}p]-${ytId}.mp4`]
 
   try {
     await spawnAsync('ffmpeg', ffmpegParams)

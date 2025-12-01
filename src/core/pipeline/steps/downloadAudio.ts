@@ -61,13 +61,13 @@ export async function descargarAudio (video: Video) {
   }
 
   if (forceDownload && existeAudio) {
-    await rename(`${Rutas.audios_descargados}/${videoId}.opus`, `${Rutas.audios_descargados}/${videoId}.old.opus`)
+    await rename(`${Rutas.audios_descargados}/${videoId}.aac`, `${Rutas.audios_descargados}/${videoId}.old.aac`)
   }
 
   await download('audio', video)
 
   const audios = readdirSync(Rutas.audios_descargados)
-  if (audios.includes(`${videoId}.opus`) && audios.includes(`${videoId}.old.opus`)) {
-    await unlink(`${Rutas.audios_descargados}/${videoId}.old.opus`)
+  if (audios.includes(`${videoId}.aac`) && audios.includes(`${videoId}.old.aac`)) {
+    await unlink(`${Rutas.audios_descargados}/${videoId}.old.aac`)
   }
 }

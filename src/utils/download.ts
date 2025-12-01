@@ -33,7 +33,7 @@ export async function download (format: 'video' | 'audio', video: Video) {
       errorHandler(err, '\nNo se pudo conseguir el id del audio')
     }
     
-    const ytDlpParamsAudio = ['-f', `${audioId}`, '-x', '--audio-format', 'opus', '-o', '%(id)s.opus', '-P', Rutas.audios_descargados, `https://www.youtube.com/watch?v=${videoId}`]
+    const ytDlpParamsAudio = ['-f', `${audioId}`, '-x', '--audio-format', 'aac', '-o', '%(id)s.aac', '-P', Rutas.audios_descargados, `https://www.youtube.com/watch?v=${videoId}`]
 
     try {
       await spawnAsync('yt-dlp', ytDlpParamsAudio)
