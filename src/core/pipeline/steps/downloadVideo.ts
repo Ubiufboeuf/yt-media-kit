@@ -151,7 +151,7 @@ export async function descargarVideo (video: Video) {
     return
   }
 
-  // Si es mayor o menor, pero diferente a la que tiene el usuario, descarga
+  // Si es diferente a la resolución que tiene el usuario, descarga
   await download('video', video)
   unlinkSync(`${Rutas.videos_descargados}/${videoDescargado}`)
 }
