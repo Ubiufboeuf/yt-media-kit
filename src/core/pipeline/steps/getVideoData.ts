@@ -50,7 +50,7 @@ export async function getVideoData (ytId: string, video: Video) {
   } catch (err) {
     errorHandler(err, 'Error leyendo la carpeta de los audios')
   }
-  
+
   const params = ['-j', `https://youtube.com/watch?v=${ytId}`]
   let process
   try {
@@ -83,13 +83,13 @@ export async function getVideoData (ytId: string, video: Video) {
   // Luego los formatos (terminados/)
   for (const formatFolder of carpetaVideosTerminados) {
     try {
-      const { isDirectory } = await stat(`${Rutas.terminados}/${ytId}/${formatFolder}`)
-      if (!isDirectory()) continue
+      const stats = await stat(`${Rutas.terminados}/${ytId}/${formatFolder}`)
+      if (!stats.isDirectory()) continue
     } catch (err) {
       errorHandler(err, `Error leyendo los metadatos del archivo ${formatFolder}`)
       continue
     }
-    
+
     if (formatFolder === 'audio') {
       const file = carpetaAudios.find((f) => f.includes(ytId))
       if (!file) {
@@ -115,9 +115,9 @@ export async function getVideoData (ytId: string, video: Video) {
     }
 
     if (formatFolder !== 'audio') {
-      const file = carpetaVideos.find((f) => f.includes(ytId))
+      const file = carpetaVideos.find((f) => f.includes(ytId) && f.includes(formatFolder))
       if (!file) {
-        errorHandler(null, 'No se encontró el video')
+        errorHandler(null, `No se encontró el video para la resolución ${formatFolder}`)
         continue
       }
       
@@ -128,7 +128,7 @@ export async function getVideoData (ytId: string, video: Video) {
 
       let resolutionMetadata: ResolutionMetadata | undefined
       try {
-        resolutionMetadata = await getResolutionData(formatFolder, streams)
+        resolutionMetadata = await getResolutionData(file, streams)
       } catch (err) {
         errorHandler(err, 'Error consiguiendo los datos del video')
       }
@@ -159,7 +159,7 @@ export async function getVideoData (ytId: string, video: Video) {
     videoData.height = resolution.height ?? -1
     videoData.width = resolution.width ?? -1
   }
-
+  
   try {
     await writeFile(`${Rutas.info}/${ytId}.json`, JSON.stringify(videoData, null, 2))
   } catch (err) {
