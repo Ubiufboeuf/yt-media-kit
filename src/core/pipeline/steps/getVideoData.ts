@@ -13,14 +13,23 @@ export async function getVideoData (ytId: string, video: Video) {
   let carpetaAudios: string[] = []
 
   const videoData: VideoMetadata = {
-    id: '',
-    title: '',
+    id: undefined,
+    title: undefined,
+    uploader_id: undefined,
+    uploader: undefined,
+    channel_is_verified: undefined,
+    channel_follower_count: undefined,
+    upload_date: undefined,
     duration: undefined,
     height: undefined,
     width: undefined,
-    mixedSize: undefined,
+    mixed_size: undefined,
+    aspect_ratio: undefined,
     audio: null,
-    videos: []
+    videos: [],
+    min_video_resolution: undefined,
+    max_video_resolution: undefined,
+    timestamp: -1
   }
 
   videoData.id = ytId
@@ -69,6 +78,11 @@ export async function getVideoData (ytId: string, video: Video) {
   }
 
   videoData.title = json.title
+  videoData.uploader = json.uploader
+  videoData.uploader_id = json.uploader_id
+  videoData.channel_follower_count = json.channel_follower_count
+  videoData.channel_is_verified = json.channel_is_verified
+  videoData.timestamp = json.timestamp ?? -1
 
   // Primero el principal (video + audio)
   const videoConAudio = carpetaVideosConAudio.find((v) => v.includes(ytId))
@@ -158,6 +172,8 @@ export async function getVideoData (ytId: string, video: Video) {
     videoData.duration = resolution.duration ?? -1
     videoData.height = resolution.height ?? -1
     videoData.width = resolution.width ?? -1
+    videoData.aspect_ratio = resolution.aspect_ratio
+    videoData.aspect_ratio = resolution.aspect_ratio
   }
   
   try {
@@ -197,7 +213,7 @@ async function getMixedVideoData (videoConAudio: string, videoData: VideoMetadat
     errorHandler(err, 'Error consiguiendo el tamaño del video con audio')
   }
 
-  if (mixedSize) videoData.mixedSize = mixedSize
+  if (mixedSize) videoData.mixed_size = mixedSize
 
   const metadata = await getFileMetadata(videoConAudio, Rutas.videos_con_audio)  
   if (!metadata) return
@@ -229,6 +245,7 @@ async function getAudioData (file: string, streams: Stream[]) {
     channel_layout: audio.channel_layout ?? 'unknown',
     channels: num(audio.channels),
     bit_rate: num(audio.bit_rate),
+    bit_rate_kbps: num(audio.bit_rate) / 1000,
     duration: num(audio.duration),
     sample_rate: audio.sample_rate === undefined ? undefined : Number(audio.sample_rate),
     size
@@ -248,15 +265,16 @@ async function getResolutionData (file: string, streams: Stream[]) {
     errorHandler(err, `Error consiguiendo el tamaño de la resolución ${file}`)
   }
 
-  const fps = getFps(video)
+  const fps = getFps(video) ?? undefined
   const width = num(video.width)
   const height = num(video.height)
-  const aspect_ratio = height !== 0 ? width / height : -1
+  const aspect_ratio = video.display_aspect_ratio
 
   const resolution: ResolutionMetadata = {
     codec: video.codec_name ?? 'unknown',
     codec_long_name: video.codec_long_name ?? 'unknown',
     bit_rate: num(video.bit_rate),
+    bit_rate_kbps: num(video.bit_rate) / 1000,
     duration: num(video.duration),
     width,
     height,

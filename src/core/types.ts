@@ -36,14 +36,23 @@ export type VideoOptions = {
 }
 
 export type VideoMetadata = {
-	id: string
-	title: string
+	id: string | undefined
+	title: string | undefined
+	uploader: string | undefined
+	uploader_id: string | undefined
+	channel_follower_count: number | undefined
+	channel_is_verified: boolean | undefined
+	upload_date: string | undefined
 	duration: number | undefined
 	width: number | undefined
 	height: number | undefined
-	mixedSize: number | undefined // <- este es el peso del audio + video
+	mixed_size: number | undefined // <- este es el peso del audio + video
+	aspect_ratio: string | undefined
 	audio: AudioMetadata | null
 	videos: ResolutionMetadata[]
+	min_video_resolution: string | undefined
+	max_video_resolution: string | undefined
+	timestamp: number
 }
 
 export type AudioMetadata = {
@@ -52,6 +61,7 @@ export type AudioMetadata = {
 	channel_layout: string | undefined
 	channels: number | undefined
 	bit_rate: number
+	bit_rate_kbps: number
 	duration: number
 	sample_rate: number | undefined
 	size: number | undefined
@@ -61,10 +71,11 @@ export type ResolutionMetadata = {
 	codec: string
 	codec_long_name: string
 	bit_rate: number
+	bit_rate_kbps: number
 	duration: number
 	size: number | undefined
 	height: number
 	width: number
-	aspect_ratio: number
+	aspect_ratio: string | undefined
 	fps: number | undefined
 }
