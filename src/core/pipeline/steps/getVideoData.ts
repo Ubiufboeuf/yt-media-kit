@@ -83,7 +83,7 @@ export async function getVideoData (ytId: string, video: Video) {
   // Luego los formatos (terminados/)
   for (const formatFolder of carpetaVideosTerminados) {
     try {
-      const { isDirectory } = await stat(`${Rutas.terminados}/${formatFolder}`)
+      const { isDirectory } = await stat(`${Rutas.terminados}/${ytId}/${formatFolder}`)
       if (!isDirectory()) continue
     } catch (err) {
       errorHandler(err, `Error leyendo los metadatos del archivo ${formatFolder}`)
