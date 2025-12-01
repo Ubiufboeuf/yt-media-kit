@@ -115,7 +115,6 @@ async function createMinimalThumbnail (ytId: string, path: string, allThumbnails
   
   try {
     await spawnAsync('ffmpeg', params)
-    console.log(`[Assets] Creada miniatura mínima: ${outputFile}`)
   } catch (err) {
     errorHandler(err, 'Error creando la miniatura mínima con FFmpeg')
   }
