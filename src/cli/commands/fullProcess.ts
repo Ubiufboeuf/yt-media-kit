@@ -262,7 +262,7 @@ export async function fullProcess () {
 
   // Descargar thumbnails/assets
   if (video.options.getThumbnails) {
-    const getVideoAssetsPromise = getVideoAssets(video.ytId, video)
+    const getVideoAssetsPromise = getVideoAssets(video.ytId)
     await oraPromise(getVideoAssetsPromise, { text: 'Consiguiendo assets del video', successText: 'Assets conseguidos', failText: 'Error consiguiendo los assets del video' })
   }
 }
