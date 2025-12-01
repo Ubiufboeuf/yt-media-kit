@@ -41,30 +41,32 @@ export async function askForResolution () {
 export async function getMaxResolutionToDownload (_resoluciones: Resolution[]): Promise<Resolution> {
   const resoluciones = [..._resoluciones]
   const maxResolution = { res: '', resNumber: 0, desired: '', desiredNumber: 0 }
-  let resolutionNumber = 0
-  let desiredNumber = 0
 
   for (const res of resoluciones) {
+    let resolutionNumber = 0
+    let desiredNumber = 0
+    
+    if (res.download.includes('p')) {
+      resolutionNumber = Number(res.download.split('p')[0])
+    }
+    
+    if (res.desired.includes('p')) {
+      desiredNumber = Number(res.desired.split('p')[0])
+    }
+    
     if (!maxResolution.res || !maxResolution.resNumber || maxResolution.resNumber < resolutionNumber) {
       maxResolution.res = res.download
       maxResolution.resNumber = resolutionNumber
       maxResolution.desired = res.desired
-
-      if (res.download.includes('p')) {
-        resolutionNumber = Number(res.download.split('p')[0])
-      }
-      
-      if (res.desired.includes('p')) {
-        desiredNumber = Number(res.desired.split('p')[0])
-      }
+      maxResolution.desiredNumber = desiredNumber
     }
   }
-  
+
   return {
     desired: maxResolution.desired,
     download: maxResolution.res,
-    desiredNumber: desiredNumber,
-    downloadNumber: resolutionNumber
+    desiredNumber: maxResolution.desiredNumber,
+    downloadNumber: maxResolution.resNumber
   }
 }
 
