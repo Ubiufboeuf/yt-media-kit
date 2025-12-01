@@ -265,4 +265,6 @@ export async function fullProcess () {
     const getVideoAssetsPromise = getVideoAssets(video.ytId)
     await oraPromise(getVideoAssetsPromise, { text: 'Consiguiendo assets del video', successText: 'Assets conseguidos', failText: 'Error consiguiendo los assets del video' })
   }
+
+  console.log('Proceso terminado')
 }
