@@ -34,3 +34,37 @@ export type VideoOptions = {
 	getVideoData: boolean
 	getThumbnails: boolean
 }
+
+export type VideoMetadata = {
+	id: string
+	title: string
+	duration: number | undefined
+	width: number | undefined
+	height: number | undefined
+	mixedSize: number | undefined // <- este es el peso del audio + video
+	audio: AudioMetadata | null
+	videos: ResolutionMetadata[]
+}
+
+export type AudioMetadata = {
+	codec: string
+	codec_long_name: string
+	channel_layout: string | undefined
+	channels: number | undefined
+	bit_rate: number
+	duration: number
+	sample_rate: number | undefined
+	size: number | undefined
+}
+
+export type ResolutionMetadata = {
+	codec: string
+	codec_long_name: string
+	bit_rate: number
+	duration: number
+	size: number | undefined
+	height: number
+	width: number
+	aspect_ratio: number
+	fps: number | undefined
+}
