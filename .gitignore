@@ -38,3 +38,7 @@ storage/
 
 # Configuración del editor
 .vscode/*
+
+# Otros
+bin/
+bin/*
