@@ -192,7 +192,7 @@ export async function getVideoData (ytId: string, video: Video) {
   }
   
   try {
-    await writeFile(`${Rutas.info}/${ytId}.json`, JSON.stringify(videoData, null, 2))
+    await writeFile(`${Rutas.info}/${ytId}.json`, JSON.stringify(videoData, (_, value) => value === undefined ? null : value, 2))
   } catch (err) {
     errorHandler(err, 'Error guardando los datos del video')
   }
