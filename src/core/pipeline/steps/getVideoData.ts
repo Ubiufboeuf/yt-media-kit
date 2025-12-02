@@ -40,8 +40,11 @@ export async function getVideoData (ytId: string, video: Video) {
     aspect_ratio: undefined,
     audio: null,
     videos: [],
+    thumbnails: [],
     min_video_resolution: undefined,
     max_video_resolution: undefined,
+    max_thumbnail: undefined,
+    min_thumbnail: undefined,
     timestamp: -1
   }
 
