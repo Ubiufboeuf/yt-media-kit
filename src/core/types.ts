@@ -50,8 +50,11 @@ export type VideoMetadata = {
 	aspect_ratio: string | undefined
 	audio: AudioMetadata | null
 	videos: ResolutionMetadata[]
+	thumbnails: Thumbnail[]
 	min_video_resolution: string | undefined
 	max_video_resolution: string | undefined
+	min_thumbnail: string | undefined
+	max_thumbnail: string | undefined
 	timestamp: number
 }
 
@@ -78,4 +81,11 @@ export type ResolutionMetadata = {
 	width: number
 	aspect_ratio: string | undefined
 	fps: number | undefined
+}
+
+export type Thumbnail = {
+  id: string
+  height: number
+  width: number
+  url: string
 }
