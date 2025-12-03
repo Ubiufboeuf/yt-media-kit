@@ -93,7 +93,10 @@ export async function getVideoData (ytId: string, video: Video) {
     return
   }
 
-  context.yt_dlp_data = json
+  // context.yt_dlp_data = json
+  videoData.__provisional = {
+    thumbnails: json.thumbnails
+  }
 
   videoData.title = json.title
   videoData.uploader = json.uploader
@@ -193,6 +196,8 @@ export async function getVideoData (ytId: string, video: Video) {
     videoData.aspect_ratio = resolution.aspect_ratio
     videoData.aspect_ratio = resolution.aspect_ratio
   }
+
+  context.videoData = videoData
   
   try {
     await writeFile(`${Rutas.info}/${ytId}.json`, JSON.stringify(videoData, (_, value) => value === undefined ? null : value, 2))

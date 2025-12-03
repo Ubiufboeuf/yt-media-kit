@@ -1,4 +1,5 @@
 import type { Video } from './video' 
+import type { YtdlpJSON } from './yt-dlp.types'
 
 export type Process = {
   videos: Video[]
@@ -56,6 +57,9 @@ export type VideoMetadata = {
 	min_thumbnail: string | undefined
 	max_thumbnail: string | undefined
 	timestamp: number
+	__provisional?: {
+		thumbnails: YtdlpJSON['thumbnails']
+	}
 }
 
 export type AudioMetadata = {
