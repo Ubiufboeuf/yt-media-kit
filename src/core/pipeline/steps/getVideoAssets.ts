@@ -51,7 +51,7 @@ export async function getVideoAssets (ytId: string) {
   }
 
   const data_thumbnails = videoData.__provisional.thumbnails
-  const thumbnails: Thumbnail = []
+  const thumbnails: Thumbnail[] = []
 
   for (const thumbnail of data_thumbnails) {
 
