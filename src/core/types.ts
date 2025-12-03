@@ -91,5 +91,5 @@ export type Thumbnail = {
   id: string
   height: number
   width: number
-  url: string
+  url: string | null
 }
