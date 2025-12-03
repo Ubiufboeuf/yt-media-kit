@@ -75,6 +75,7 @@ export type AudioMetadata = {
 }
 
 export type ResolutionMetadata = {
+	id: string
 	codec: string
 	codec_long_name: string
 	bit_rate: number

@@ -197,6 +197,18 @@ export async function getVideoData (ytId: string, video: Video) {
     videoData.aspect_ratio = resolution.aspect_ratio
   }
 
+  const { videos } = videoData
+  let maxHeight
+  let minHeight = maxHeight = videos[0].height
+
+  for (const { height } of videos) {
+    minHeight = height < minHeight ? height : minHeight
+    maxHeight = height > maxHeight ? height : maxHeight
+  }
+  
+  videoData.min_video_resolution = videos.find((t) => t.height === minHeight)?.id
+  videoData.max_video_resolution = videos.find((t) => t.height === maxHeight)?.id
+
   context.videoData = videoData
   
   try {
@@ -294,6 +306,7 @@ async function getResolutionData (file: string, streams: Stream[]) {
   const aspect_ratio = video.display_aspect_ratio
 
   const resolution: ResolutionMetadata = {
+    id: `${height}p`,
     codec: video.codec_name ?? 'unknown',
     codec_long_name: video.codec_long_name ?? 'unknown',
     bit_rate: num(video.bit_rate),
