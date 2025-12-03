@@ -13,5 +13,8 @@ export async function createDirectories (videoId: string) {
   await mkdirp(`${Rutas.assets}/${videoId}`)
 
   await mkdirp(`${Rutas.info}`)
-  await writeFile(`${Rutas.info}/${videoId}.json`, '{}')
+
+  try {
+    await writeFile(`${Rutas.info}/${videoId}.json`, '{}', { flag: 'wx' })
+  } catch { /* empty */ }
 }
