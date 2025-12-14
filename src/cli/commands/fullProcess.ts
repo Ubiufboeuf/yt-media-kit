@@ -6,7 +6,7 @@ import type { VideoOptions } from '../../core/types'
 import { descargarAudio } from '../../core/pipeline/steps/downloadAudio'
 import list from '../../lib/list-of-videos-to-suggest.json' with { type: 'json' }
 import { demuxVideoAndAudio, muxVideoAndAudio } from '../../core/pipeline/steps/sync'
-import { response as programOptions } from 'src/lib/constants'
+import { PRD, response as programOptions, Rutas } from 'src/lib/constants'
 import { errorHandler } from 'src/utils/errorHandler'
 import { getVideoIdFromUrl } from 'src/utils/readUrl'
 import  { addNewVideo, getProcessParam } from 'src/core/process'
@@ -20,6 +20,7 @@ import { createResolutions } from 'src/core/pipeline/steps/createResolutions'
 import { createStreams } from 'src/core/pipeline/steps/createStreams'
 import { getVideoData } from 'src/core/pipeline/steps/getVideoData'
 import { getVideoAssets } from 'src/core/pipeline/steps/getVideoAssets'
+import { copySync } from 'fs-extra'
 
 const useDefaultVideoId = getProcessParam('useDefaultVideoId')
 
@@ -265,6 +266,10 @@ export async function fullProcess () {
     const getVideoAssetsPromise = getVideoAssets(video.ytId)
     await oraPromise(getVideoAssetsPromise, { text: 'Consiguiendo assets del video', successText: 'Assets conseguidos', failText: 'Error consiguiendo los assets del video' })
   }
+
+  copySync(`${Rutas.terminados}/${video.ytId}`, `${PRD}/public/videos/${video.ytId}`)
+  copySync(`${Rutas.assets}/${video.ytId}`, `${PRD}/public/assets/${video.ytId}`)
+  copySync(`${Rutas.info}/${video.ytId}.json`, `${PRD}/public/info/${video.ytId}.json`)
 
   console.log('Proceso terminado')
 }
