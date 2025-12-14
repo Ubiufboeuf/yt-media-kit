@@ -39,7 +39,7 @@ export async function createResolutions (ytId: string, video: Video) {
     '144p': ['-map', '0:v', '-c:v', 'libx264', '-vf', 'scale=256:144', '-b:v', '400k', '-maxrate', '428k', '-bufsize', '800k', '-g', '24', '-sc_threshold', '0', '-keyint_min', '24', '-x264-params', 'keyint=24:min-keyint=24', '-an', '-f', 'mp4', `${Rutas.videos}/[144p]-${ytId}.mp4`],
     '32p': ['-map', '0:v', '-c:v', 'libx264', '-vf', 'scale=32:18', '-b:v', '8k', '-maxrate', '8k', '-bufsize', '8k', '-g', '24', '-sc_threshold', '0', '-keyint_min', '24', '-x264-params', 'keyint=24:min-keyint=24', '-an', '-f', 'mp4', `${Rutas.videos}/[32p]-${ytId}.mp4`]
   }
-  
+
   const videoName = videosProcesados.find((file) => file.includes(ytId) && file.includes(video.maxResolutionToDownload.download))
   if (!videoName) {
     console.error('\nError encontrando un video que debería existir. No toques los archivos en medio del programa, tontón')
@@ -49,14 +49,14 @@ export async function createResolutions (ytId: string, video: Video) {
 
   const params = ['-i', `${Rutas.videos}/${videoName}`]
   
-  for (const { pending, r: res } of resoluciones) {
-    if (!pending) continue
+  for (const { r: res } of resoluciones) {
+    // if (!pending) continue
 
     params.push(...paramsFragments[res.desired as keyof typeof paramsFragments])
   }
 
   try {
-    await spawnAsync('ffmpeg', params)
+    await spawnAsync('ffmpeg', params, true)
   } catch (err) {
     errorHandler(err, 'Error creando las resoluciones para el video')
   }

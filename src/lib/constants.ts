@@ -95,10 +95,10 @@ export const FONTFACES = {
 }
 
 export const PROGRAM_VERSION = '2025.09.23'
-export const YT_DLP = 'yt-dlp_linux'
+export const YT_DLP = 'yt-dlp-linux'
 export const MP4BOX = 'MP4Box'
 export const KWD = '/home/mango/Dev/yt-media-kit' // KWD: Kit-Working-Directory
-export const PRD = '/home/mango/Videos/prod' // PRD:  PRoduction-Directory
+export const PRD = '/home/mango/Dev/prev-server-youtube-clone' // PRD:  PRoduction-Directory
 export const MIN_RES = '32p'
 
 export const Rutas = {

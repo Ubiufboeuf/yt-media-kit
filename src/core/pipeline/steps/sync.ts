@@ -108,7 +108,7 @@ export async function demuxVideoAndAudio (ytId: string, video: Video) {
   }
 
   if (!audioSeparado) {
-    await demuxAudio(ytId)
+    await demuxAudio(ytId, video)
   }
 
   if (videoSeparado && forceUnsync) {
@@ -136,7 +136,7 @@ export async function demuxVideoAndAudio (ytId: string, video: Video) {
     await rename(`${Rutas.audios}/${audioSeparado}`, `${Rutas.audios}/${slug}.old${ext}`)
     
     // 2. Consigue (separa) el nuevo audio
-    await demuxAudio(ytId)
+    await demuxAudio(ytId, video)
 
     // 3. Borra el viejo si se separó el nuevo (se espera que el renombrar de antes salió bien)
     const audios = await readdir(Rutas.audios)

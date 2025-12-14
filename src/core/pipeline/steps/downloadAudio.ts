@@ -11,6 +11,7 @@ export async function getAudioId (videoId: string) {
   const ytDlpParams = ['-F', `https://www.youtube.com/watch?v=${videoId}`]
   const ytDlpOutput = await spawnAsync('yt-dlp', ytDlpParams, false)
   const lines: string[] = []
+  const hasOriginal = ytDlpOutput.includes('original')
 
   for (const line of ytDlpOutput.split('\n')) {
     if (line.includes('images') || line.includes('[youtube]') || line.includes('[info]') || line.includes('---') || line.includes('ID') || line.trim() === '') continue
@@ -21,6 +22,8 @@ export async function getAudioId (videoId: string) {
   const best_id = { id: '', size: '', sizeInMiB: 0, tbr: '', tbrNumber: 0 }
 
   for (const line of lines) {
+    if (hasOriginal && !line.includes('original')) continue
+    
     const [part1, part2, part3] = line.split('|').map((p) => p.trim())
     if (!part1 || !part2 || !part3) continue
     
@@ -61,7 +64,7 @@ export async function descargarAudio (video: Video) {
   }
 
   if (forceDownload && existeAudio) {
-    await rename(`${Rutas.audios_descargados}/${videoId}.aac`, `${Rutas.audios_descargados}/${videoId}.old.aac`)
+    await rename(`${Rutas.audios_descargados}/${videoId}.m4a`, `${Rutas.audios_descargados}/${videoId}.old.m4a`)
   }
 
   await download('audio', video)
