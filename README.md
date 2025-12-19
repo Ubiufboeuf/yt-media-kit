@@ -2,7 +2,7 @@
 
 ## 🔹 Instalación
 
-Clona el proyecto y luego instala dependencias:
+Descarga el [binario independiente](https://github.com/Ubiufboeuf/yt-media-kit/releases/download/latest/yt-media-kit), o clona el proyecto y luego instala dependencias:
 
 ```sh
 git clone --depth 1 https://github.com/Ubiufboeuf/yt-media-kit
