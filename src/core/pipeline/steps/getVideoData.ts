@@ -102,6 +102,7 @@ export async function getVideoData (ytId: string, video: Video) {
   videoData.uploader = json.uploader
   videoData.uploader_id = json.uploader_id
   videoData.channel_follower_count = json.channel_follower_count
+  videoData.upload_date = json.upload_date
   videoData.channel_is_verified = json.channel_is_verified
   videoData.timestamp = json.timestamp ?? -1
 
@@ -194,7 +195,6 @@ export async function getVideoData (ytId: string, video: Video) {
     videoData.height = resolution.height ?? -1
     videoData.width = resolution.width ?? -1
     videoData.aspect_ratio = resolution.aspect_ratio
-    videoData.aspect_ratio = resolution.aspect_ratio
   }
 
   const { videos } = videoData
@@ -209,6 +209,8 @@ export async function getVideoData (ytId: string, video: Video) {
   videoData.min_video_resolution = videos.find((t) => t.height === minHeight)?.id
   videoData.max_video_resolution = videos.find((t) => t.height === maxHeight)?.id
 
+  delete videoData.__provisional
+  
   context.videoData = videoData
   
   try {
@@ -261,6 +263,7 @@ async function getMixedVideoData (videoConAudio: string, videoData: VideoMetadat
   videoData.duration = num(format.duration)
   videoData.height = video.height ?? -1
   videoData.width = video.width ?? -1
+  videoData.aspect_ratio = video.display_aspect_ratio
 }
 
 async function getAudioData (file: string, streams: Stream[]) {
